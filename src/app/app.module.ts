@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './views/pages/auth/login/login.component';
+import { ForgotPasswordComponent } from './views/pages/auth/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
