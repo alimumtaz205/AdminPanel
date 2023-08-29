@@ -3,24 +3,27 @@
     <div class="wrapper" >
         <div class="form-left">
             <div class="mb-3 pt-5 logo">
-                <img src="assets/img/logo-inverse.png" alt="logo" class="img-fluid">
+                <img src="../../../../../assets/pages/img/Isolation_Mode.png" alt="logo" class="img-fluid">
               </div>
             <p class="pe-5">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et molestie ac feugiat sed. Diam volutpat commodo.
             </p>
             
         </div>
-        <form class="form-right">
+        <form class="form-right" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <h2 class="text-uppercase mt-2">Login</h2>
             <div class="row">
                 <div class="col-sm-12 mb-3">
                     <label>MSIDN</label>
-                    <input type="text" name="first_name" id="first_name" class="input-field" placeholder="Enter MSIDN" required>
+                    <input id="misdn" type="text" formControlName="misdn" class="input-field" placeholder="Enter MSIDN">
+                    <!-- <input type="text" name="first_name" id="first_name" [formContro]="misdn" class="input-field" placeholder="Enter MSIDN" required> -->
                 </div>
             </div>
             <div class="mb-3">
                 <label>Password</label>
-                <div class="d-flex"><input type="password" class="input-field" name="password" required placeholder="Enter Password" id="id_password">
+                <div class="d-flex">
+                    <!-- <input id="password" type="password" formControlName="password" class="input-field" placeholder="Enter MSIDN"> -->
+                    <input type="password" formArrayName="password" formControlName="password" class="input-field" name="password" required placeholder="Enter Password" id="id_password">
                     <i class="far fa-eye" id="togglePassword" style="margin-left: -30px; cursor: pointer; margin-top: 14px;"></i>
                 </div>
                 
@@ -31,7 +34,8 @@
                 </label>
             </div>
             <div class="form-field ">
-                <input type="submit" value="Register" class="register" name="register">
+                <!-- <input type="submit" value="Register" > -->
+                <button type="submit" [disabled]="!loginForm.valid" class="register" name="register">Register</button>
             </div>
         </form>
     </div>
