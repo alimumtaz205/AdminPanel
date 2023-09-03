@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://34.240.167.201/api/'
+  API_URL: 'http://34.240.167.201/ApanelWeb/api/'
 };
 
 /*

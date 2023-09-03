@@ -19,7 +19,8 @@ export class InquiryManagemntComponent implements OnInit {
     'Country',
     'University',
     'Course Level',
-    'Subject'
+    'Subject',
+    'Action'
   
   ];
   clickedRows = new Set<InqueryResponse>();

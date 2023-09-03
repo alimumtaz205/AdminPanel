@@ -25,6 +25,16 @@ import {MatInputModule} from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { AuthGuardService } from './_services/auth-guard.service';
+import { AuthService } from './_services/auth.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AddUniversityComponent } from './views/pages/university-management/dialog/add-university.component';
+import { AlertDialogDeleteComponent } from './views/pages/alert-dialogs/alert-dialog-delete.component';
 
 @NgModule({
   declarations: [
@@ -41,10 +51,13 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
     StaffComponent,
     StudentsComponent,
     UserManagementComponent,
-    ActivityComponent
+    ActivityComponent,
+    AddUniversityComponent,
+    AlertDialogDeleteComponent
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -55,9 +68,17 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
     FormsModule,
     HttpClientModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule 
   ],
-  providers: [],
+  providers: [AuthGuardService,AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

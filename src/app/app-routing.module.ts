@@ -7,6 +7,9 @@ import { LoginLayoutComponent } from './views/layouts/login-layout.component';
 import { HomeLayoutComponent } from './views/layouts/home-layout.component';
 import { InquiryManagemntComponent } from './views/pages/inquiry-managemnt/inquiry-managemnt.component';
 import { InqueryService } from './_services/inquery.service';
+import { ActivityComponent } from './views/pages/activity/activity.component';
+import { AuthGuardService } from './_services/auth-guard.service';
+import { UniversityManagementComponent } from './views/pages/university-management/university-management.component';
 
 const routes: Routes = [
   {
@@ -30,7 +33,15 @@ const routes: Routes = [
       },
       {
         path:'inquiry-managemnt',
-        component: InquiryManagemntComponent
+        component: InquiryManagemntComponent, canActivate:[AuthGuardService]
+      },
+      {
+        path:'app-activity',
+        component:ActivityComponent
+      },
+      {
+        path:'university-management',
+        component:UniversityManagementComponent
       }
     ]
   },

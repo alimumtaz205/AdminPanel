@@ -252,6 +252,13 @@ select:invalid { color: rgb(173, 173, 173); }
     text-align: left
 }
 
+.table-header-style{
+    text-align: center!important;
+    font-weight: bold;
+    font-size: 1.0rem;
+    color: black;
+}
+
 #msform fieldset:not(:first-of-type) {
     display: none
 }

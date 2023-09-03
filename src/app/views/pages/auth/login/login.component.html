@@ -10,14 +10,22 @@
             </p>
             
         </div>
-        <form class="form-right" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form class="form-right" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
             <h2 class="text-uppercase mt-2">Login</h2>
             <div class="row">
                 <div class="col-sm-12 mb-3">
-                    <label>MSIDN</label>
-                    <input id="misdn" type="text" formControlName="misdn" class="input-field" placeholder="Enter MSIDN">
+                    <label for="misdn">MSIDN</label>
+                    <input type="text" formArrayName="misdn" formControlName="misdn" class="input-field" placeholder="Enter MSIDN" id="misdn" required>
                     <!-- <input type="text" name="first_name" id="first_name" [formContro]="misdn" class="input-field" placeholder="Enter MSIDN" required> -->
                 </div>
+                <!-- <div *ngIf="!misdn?.valid && (misdn?.dirty ||misdn?.touched)">
+                <div [hidden]="!misdn?.errors.required">
+                  First Name is required
+                </div>
+                <div [hidden]="!misdn.errors.minlength">
+                  Min Length is 10
+                </div>
+              </div> -->
             </div>
             <div class="mb-3">
                 <label>Password</label>
@@ -35,7 +43,7 @@
             </div>
             <div class="form-field ">
                 <!-- <input type="submit" value="Register" > -->
-                <button type="submit" [disabled]="!loginForm.valid" class="register" name="register">Register</button>
+                <button type="submit" [disabled]="!loginForm.valid" class="register" name="register">Login</button>
             </div>
         </form>
     </div>
