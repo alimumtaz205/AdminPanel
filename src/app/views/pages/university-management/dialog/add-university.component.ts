@@ -11,104 +11,77 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-university.component.css']
 })
 export class AddUniversityComponent implements OnInit {
-  public headerText:any ="Add University";
-  public buttonText:any = "Add"
+  public headerText: any = "Add University";
+  public buttonText: any = "Add"
   selected_country = 'none';
   selected_course = 'none';
   selected_subject = 'none';
   lovType: string = "1";
-  university_name:any;
-  university_description:any;
+  university_name: any;
+  university_description: any;
   countryListModel: any[] = [
   ];
-  addUniversityForm!:FormGroup
-  displayedColumns:string[]=['']
-  
+  addUniversityForm!: FormGroup
+  displayedColumns: string[] = ['']
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public editData:any,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
     private countryService: CountryService,
     private universityService: UniversityService,
     private formBuilder: FormBuilder,
-    private dialogRef:MatDialogRef<AddUniversityComponent>
-    ) { }
+    private dialogRef: MatDialogRef<AddUniversityComponent>
+  ) { }
 
   ngOnInit(): void {
     debugger;
     this.addUniversityForm = this.formBuilder.group({
-      countryName:['', Validators.required],
-      university_name:['', Validators.required],
-      university_id:[''],
-      university_description:['', Validators.required],
-      // selected_course:['', Validators.required],
-      // selected_subject:['']
+      countryName: ['', Validators.required],
+      university_name: ['', Validators.required],
+      university_id: [''],
+      university_description: ['', Validators.required],
     });
 
-  if(this.editData)
-   {
-    debugger;
-    this.headerText = this.editData.header_text,
-    this.buttonText = "Update"
-    this.addUniversityForm.controls['countryName'].setValue(this.editData.countryID.id);
-    this.addUniversityForm.controls['university_name'].setValue(this.editData.universityDetails.name);
-    this.addUniversityForm.controls['university_id'].setValue(this.editData.universityDetails.id);
-    this.addUniversityForm.controls['university_description'].setValue(this.editData.universityDetails.description);
-    // this.addUniversityForm.controls['selected_course'].setValue(this.editData.universityDetails.name)
-    // this.addUniversityForm.controls['selected_subject'].setValue(this.editData.universityDetails.name)
-   }
+    if (this.editData) {
+      debugger;
+      this.headerText = this.editData.header_text,
+        this.buttonText = "Update"
+      this.addUniversityForm.controls['countryName'].setValue(this.editData.countryID.id);
+      this.addUniversityForm.controls['university_name'].setValue(this.editData.universityDetails.name);
+      this.addUniversityForm.controls['university_id'].setValue(this.editData.universityDetails.id);
+      this.addUniversityForm.controls['university_description'].setValue(this.editData.universityDetails.description);
+    }
     this.getCountries(this.lovType);
-   // this.initilizeForm();
   }
 
-  initilizeForm(){
-    this.addUniversityForm = this.formBuilder.group({
-      country:['', Validators.required],
-      university_name:['', Validators.required],
-      university_description:['', Validators.required],
-      selected_course:['', Validators.required],
-      selected_subject:['']
-    });
-    if(this.editData)
-    debugger;
-    this.headerText = this.editData.header_text,
-    this.addUniversityForm.controls['country'].setValue(this.editData.countryID.id)
-    this.addUniversityForm.controls['university_name'].setValue(this.editData.universityDetails.name)
-    this.addUniversityForm.controls['university_description'].setValue(this.editData.universityDetails.description)
-    this.addUniversityForm.controls['selected_course'].setValue(this.editData.universityDetails.name)
-    this.addUniversityForm.controls['selected_subject'].setValue(this.editData.universityDetails.name)
-
-    //this.countryListModel = this.editData.countryID
-  }
-
-  getCountries(lovType:any){
+  getCountries(lovType: any) {
     this.countryService.getCountries(lovType).subscribe((resp) => {
       if (resp.isSuccessful) {
         this.countryListModel = resp.data;
       }
-      else{
+      else {
         debugger;
       }
     });
   }
 
-  onSubmit(){
+  onSubmit() {
     debugger;
-    if(this.addUniversityForm.valid){
-      if(!this.editData)
-      {
+    if (this.addUniversityForm.valid) {
+      if (!this.editData) {
         this.addUniversity();
       }
-      else{
+      else {
         this.updateUniversity();
       }
     }
   }
 
 
-  addUniversity(){
+  addUniversity() {
     debugger;
-    var formData={
-      countryID:  this.addUniversityForm.value.countryName + "",
-      universityName:  this.addUniversityForm.value.university_name,
+    var formData = {
+      countryID: this.addUniversityForm.value.countryName + "",
+      universityName: this.addUniversityForm.value.university_name,
       universityDescription: this.addUniversityForm.value.university_description
     }
 
@@ -123,7 +96,7 @@ export class AddUniversityComponent implements OnInit {
         this.addUniversityForm.reset();
         this.dialogRef.close('add');
       }
-      else{
+      else {
         debugger;
         Swal.fire({
           icon: 'error',
@@ -136,47 +109,47 @@ export class AddUniversityComponent implements OnInit {
   }
 
 
-  updateUniversity(){
+  updateUniversity() {
     debugger;
-    var formData={
-      countryID:  this.addUniversityForm.value.countryName + "",
+    var formData = {
+      countryID: this.addUniversityForm.value.countryName + "",
       universityID: this.addUniversityForm.value.university_id + "",
-      universityName:  this.addUniversityForm.value.university_name,
+      universityName: this.addUniversityForm.value.university_name,
       universityDescription: this.addUniversityForm.value.university_description
     }
     this.universityService.updateUniveristy(formData)
-    .subscribe({
-      next:(resp) => {
-      if (resp.isSuccessful) {
-        this.countryListModel = resp.data;
-        Swal.fire(
-          'Great!',
-          resp.message,
-          'success'
-        )
-        this.addUniversityForm.reset();
-        this.dialogRef.close('update');
-      }
-      else{
-        debugger;
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-          footer: 'Error message' + ':' + resp.message
-        })
-      }
-    }
-    });
+      .subscribe({
+        next: (resp) => {
+          if (resp.isSuccessful) {
+            this.countryListModel = resp.data;
+            Swal.fire(
+              'Great!',
+              resp.message,
+              'success'
+            )
+            this.addUniversityForm.reset();
+            this.dialogRef.close('update');
+          }
+          else {
+            debugger;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+              footer: 'Error message' + ':' + resp.message
+            })
+          }
+        }
+      });
   }
 
-  changeClient(data:any){
+  changeClient(data: any) {
     debugger;
     //this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
 
-  closeModel(){
+  closeModel() {
     debugger;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -185,7 +158,7 @@ export class AddUniversityComponent implements OnInit {
       },
       buttonsStyling: false
     })
-    
+
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
       text: "You want to close this!",
@@ -196,7 +169,7 @@ export class AddUniversityComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        
+
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel

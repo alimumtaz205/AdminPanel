@@ -14,6 +14,17 @@ export class UniversityService {
 
   constructor(private http:HttpClient) { }
 
+  getUniversities(countryId:string): Observable<GenericResponse<UniversityResponse[]>> {
+    debugger;
+    var country_ID={
+      countryID: countryId += ''
+    }
+    debugger;
+    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/GetUniversities`, country_ID)
+    .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
+  }
+
+
   addUniversity(formData:any): Observable<GenericResponse<UniversityResponse[]>> {
     debugger;
     return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/AddUniveristy`, formData)

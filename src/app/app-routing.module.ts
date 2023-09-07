@@ -7,9 +7,13 @@ import { LoginLayoutComponent } from './views/layouts/login-layout.component';
 import { HomeLayoutComponent } from './views/layouts/home-layout.component';
 import { InquiryManagemntComponent } from './views/pages/inquiry-managemnt/inquiry-managemnt.component';
 import { InqueryService } from './_services/inquery.service';
-import { ActivityComponent } from './views/pages/activity/activity.component';
 import { AuthGuardService } from './_services/auth-guard.service';
 import { UniversityManagementComponent } from './views/pages/university-management/university-management.component';
+import { CountryManagementComponent } from './views/pages/country-management/country-management.component';
+import { CourseManagementComponent } from './views/pages/course-management/course-management.component';
+import { SubjectManagementComponent } from './views/pages/subject-management/subject-management.component';
+import { UserManagementComponent } from './views/pages/user-management/user-management.component';
+import { ActivityComponent } from './views/pages/user-management/activity/activity.component';
 
 const routes: Routes = [
   {
@@ -32,16 +36,33 @@ const routes: Routes = [
         component: HomeComponent
       },
       {
-        path:'inquiry-managemnt',
-        component: InquiryManagemntComponent, canActivate:[AuthGuardService]
+        path: 'inquiry-managemnt',
+        component: InquiryManagemntComponent, canActivate: [AuthGuardService]
       },
       {
-        path:'app-activity',
-        component:ActivityComponent
+        path: 'app-activity',
+        component: ActivityComponent,
       },
       {
-        path:'university-management',
-        component:UniversityManagementComponent
+        path: 'university-management',
+        component: UniversityManagementComponent,
+        canActivate: [AuthGuardService]
+      },
+      {
+        path: 'country-management',
+        component: CountryManagementComponent,
+      },
+      {
+        path: 'course-management',
+        component: CourseManagementComponent,
+      },
+      {
+        path: 'subject-management',
+        component: SubjectManagementComponent, canActivate: [AuthGuardService]
+      },
+      {
+        path: 'user-management',
+        component: UserManagementComponent, canActivate: [AuthGuardService]
       }
     ]
   },
@@ -51,6 +72,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers:[InqueryService]
+  providers: [InqueryService]
 })
 export class AppRoutingModule { }

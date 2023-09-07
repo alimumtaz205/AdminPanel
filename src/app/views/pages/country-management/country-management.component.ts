@@ -1,22 +1,21 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CountryResponse } from 'src/app/_models/DTO/Response/CountryResponse';
 import { CountryService } from 'src/app/_services/countryService/country.service';
-import { AddUniversityComponent } from './dialog/add-university.component';
-import { AlertDialogDeleteComponent } from '../alert-dialogs/alert-dialog-delete.component';
+import { AddUniversityComponent } from '../university-management/dialog/add-university.component';
 import Swal from 'sweetalert2';
-import { UniversityService } from 'src/app/_services/univeristyService/university.service';
+import { AddCountryComponent } from './add-country/add-country.component';
 
 @Component({
-  selector: 'university-management',
-  templateUrl: './university-management.component.html',
-  styleUrls: ['./university-management.component.css']
-  
+  selector: 'country-management',
+  templateUrl: './country-management.component.html',
+  styleUrls: ['./country-management.component.css']
 })
-export class UniversityManagementComponent implements OnInit {
+export class CountryManagementComponent implements OnInit {
+
   message: string = "Are you sure?"
   confirmButtonText = "Yes"
   cancelButtonText = "Cancel"
@@ -27,7 +26,7 @@ export class UniversityManagementComponent implements OnInit {
   selected_country_id:any
   displayedColumns: string[] = [
     'ID',
-    'University Name',
+    'Country Name',
     'Description',
     'Image',
     'Action'
@@ -45,7 +44,6 @@ export class UniversityManagementComponent implements OnInit {
 
   constructor(
     private countryService: CountryService,
-    private universityService: UniversityService,
     public dialogRef:MatDialog
      ) { 
   }
@@ -54,29 +52,25 @@ export class UniversityManagementComponent implements OnInit {
     this.getCountries(this.lovType);
   }
 
-  getCountries(lovType:any){
-    this.countryService.getCountries(lovType).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        this.countryList = resp.data;
-      }
-      else{
-        debugger;
-      }
-    });
-  }
-
-  getUniversities(countryId:any){
+  getCountries(countryId:any){
     debugger;
-    this.universityService.getUniversities(this.selected_country_id).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        this.dataSource = new MatTableDataSource(resp.data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+    countryId = "1";
+    this.countryService.getCountries(countryId)
+    .subscribe({
+      next:(resp) => {
+        if (resp.isSuccessful) {
+          debugger;
+          this.dataSource = new MatTableDataSource(resp.data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        }
+        else{
+          debugger;
+        }
+        console.error();
+        
       }
-      else{
-        debugger;
-      }
-    });
+    });   
   }
 
   changeClient(data:any){
@@ -84,35 +78,30 @@ export class UniversityManagementComponent implements OnInit {
     this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
-  changeClient1(data:any){
-  
-    //this.selected_country_id = data.id;
-    //this.getUniversities(data.id);
-  }
 
   openDialog(){
-    this.dialogRef.open(AddUniversityComponent, {
+    this.dialogRef.open(AddCountryComponent, {
       width: '40%',
       panelClass: 'custom-modalbox'
     }).afterClosed().subscribe(val=>{
       if(val==='add'){
-        this.getUniversities(this.selected);
+        this.getCountries(this.selected);
       }
     })
   }
 
   updateDialog(element:any){
     debugger;
-    this.dialogRef.open(AddUniversityComponent, {
+    this.dialogRef.open(AddCountryComponent, {
       width: '40%',
       data : {
-        header_text : 'Update University',
+        header_text : 'Update Country',
         countryID: this.selected,
         universityDetails: element
       }
     }).afterClosed().subscribe(val=>{
       if(val==='update'){
-        this.getUniversities(this.selected);
+        this.getCountries(this.selected);
       }
     })
   }
@@ -150,4 +139,5 @@ export class UniversityManagementComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }

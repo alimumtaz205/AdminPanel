@@ -1,22 +1,23 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CountryResponse } from 'src/app/_models/DTO/Response/CountryResponse';
 import { CountryService } from 'src/app/_services/countryService/country.service';
-import { AddUniversityComponent } from './dialog/add-university.component';
-import { AlertDialogDeleteComponent } from '../alert-dialogs/alert-dialog-delete.component';
+import { AddUniversityComponent } from '../university-management/dialog/add-university.component';
 import Swal from 'sweetalert2';
+import { AddCourseComponent } from './add-course/add-course.component';
+import { CourseService } from 'src/app/_services/courseService/course.service';
 import { UniversityService } from 'src/app/_services/univeristyService/university.service';
 
 @Component({
-  selector: 'university-management',
-  templateUrl: './university-management.component.html',
-  styleUrls: ['./university-management.component.css']
-  
+  selector: 'app-course-management',
+  templateUrl: './course-management.component.html',
+  styleUrls: ['./course-management.component.css']
 })
-export class UniversityManagementComponent implements OnInit {
+export class CourseManagementComponent implements OnInit {
+
   message: string = "Are you sure?"
   confirmButtonText = "Yes"
   cancelButtonText = "Cancel"
@@ -24,10 +25,10 @@ export class UniversityManagementComponent implements OnInit {
   lovType: string = "1";
   selected = 'none';
   selected_model = 'none';
-  selected_country_id:any
+  selected_university_id:any
   displayedColumns: string[] = [
     'ID',
-    'University Name',
+    'Course Name',
     'Description',
     'Image',
     'Action'
@@ -39,80 +40,88 @@ export class UniversityManagementComponent implements OnInit {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  countryList: any[] = [
+  universityList: any[] = [
   ];
  
 
   constructor(
-    private countryService: CountryService,
+    private courseService: CourseService,
     private universityService: UniversityService,
     public dialogRef:MatDialog
      ) { 
   }
 
   ngOnInit(): void {
-    this.getCountries(this.lovType);
+    this.getUniversities(this.lovType);
   }
 
-  getCountries(lovType:any){
-    this.countryService.getCountries(lovType).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        this.countryList = resp.data;
-      }
-      else{
-        debugger;
-      }
-    });
-  }
 
   getUniversities(countryId:any){
     debugger;
-    this.universityService.getUniversities(this.selected_country_id).subscribe((resp) => {
+    countryId = 1;
+    this.universityService.getUniversities(countryId).subscribe((resp) => {
       if (resp.isSuccessful) {
-        this.dataSource = new MatTableDataSource(resp.data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.universityList = resp.data;
       }
       else{
         debugger;
       }
     });
+  }
+
+  getCourses(ID:any){
+    debugger;
+    var formData={
+      universityID : this.selected_university_id +""
+    }
+
+    this.courseService.getCourses(formData)
+    .subscribe({
+      next:(resp) => {
+        if (resp.isSuccessful) {
+          debugger;
+          this.dataSource = new MatTableDataSource(resp.data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        }
+        else{
+          debugger;
+        }
+        console.error();
+        
+      }
+    });   
   }
 
   changeClient(data:any){
  
-    this.selected_country_id = data.id;
-    //this.getUniversities(data.id);
-  }
-  changeClient1(data:any){
-  
-    //this.selected_country_id = data.id;
+    this.selected_university_id = data.id;
     //this.getUniversities(data.id);
   }
 
   openDialog(){
-    this.dialogRef.open(AddUniversityComponent, {
+    this.dialogRef.open(AddCourseComponent, {
       width: '40%',
       panelClass: 'custom-modalbox'
     }).afterClosed().subscribe(val=>{
       if(val==='add'){
-        this.getUniversities(this.selected);
+        this.getCourses(this.selected);
       }
     })
   }
 
   updateDialog(element:any){
     debugger;
-    this.dialogRef.open(AddUniversityComponent, {
+    this.dialogRef.open(AddCourseComponent, {
       width: '40%',
       data : {
-        header_text : 'Update University',
-        countryID: this.selected,
-        universityDetails: element
+        header_text : 'Update Course',
+        universityID: this.selected,
+        courseDetails: element
       }
     }).afterClosed().subscribe(val=>{
       if(val==='update'){
-        this.getUniversities(this.selected);
+        this.getCourses(this.selected);
       }
     })
   }
@@ -150,4 +159,6 @@ export class UniversityManagementComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }
+

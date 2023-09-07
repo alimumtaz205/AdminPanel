@@ -1,0 +1,53 @@
+  
+  <!-- add country modal -->
+
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white"  [mat-dialog-close]="" aria-label="Close"></button>
+  </div>
+  <form class="form-right" [formGroup]="addCourseForm">
+
+    <div class="container" style="padding-top: 20px;">
+        <div class="row">
+            <mat-form-field>
+                <mat-label>University</mat-label>
+                <mat-select placeholder="Select University" formControlName="university_Id" (selectionChange)="changeClient($event.value)">
+                  <mat-option>None</mat-option> 
+                  <mat-option *ngFor="let university of universityListModel" [value]="university.id">{{university.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+    </div>
+
+      <div class="row">
+          <mat-form-field class="example-full-width">
+              <mat-label>Course Name</mat-label>
+              <input matInput placeholder="Enter Course Name" formControlName="course_name" value="">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" hidden="true">
+                <input matInput placeholder="Enter Course ID" formControlName="course_id" value="">
+              </mat-form-field>
+    </div>
+      <div class="row">
+
+      <mat-form-field class="example-full-width">
+          <mat-label>Course Description</mat-label>
+          <textarea matInput placeholder="Please Enter Course Description" formControlName="course_description"></textarea>
+        </mat-form-field>
+      </div>
+      <!-- <div class="col-md-6 mt-4">
+          <mat-form-field appearance="fill">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+      </div> -->
+
+    </div>
+  <div class="modal-footer border-0">
+    <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>   -->
+    <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+    <button type="button" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+  </div>
+  </form>
