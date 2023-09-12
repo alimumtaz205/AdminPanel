@@ -38,7 +38,7 @@
         </div>
         <div class="d-flex mt-xl-custom xs-custom">
             <!-- <button class="btn btn-theme me-3" data-bs-toggle="modal" data-bs-target="#add_university">Add New University</button> -->
-            <button mat-raised-button color="primary" (click)="addActivity()">Add New Activity</button>
+            <button mat-raised-button color="primary" (click)="addProfile()">Add New Profile</button>
             <button class="btn btn-theme-secondary xs-custom-mt">
                 <svg class="me-1" width="16" height="16" viewBox="0 0 19 19" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -59,62 +59,40 @@
 
         <table th.mat-header-cell mat-table [dataSource]="dataSource" class="w-100" [dataSource]="dataSource" matSort>
             <caption></caption>
-            <ng-container matColumnDef="activityID">
+            <ng-container matColumnDef="profileID">
                 <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">ID</th>
-                <td mat-cell *matCellDef="let element">{{ element.activityID }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.profileID }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="activityName">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Activity Name</th>
-                <td mat-cell *matCellDef="let element">{{ element.activityName }}</td>
+            <ng-container matColumnDef="profileName">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Profile Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.profileName }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="parentActivityName">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Parent Activity</th>
-                <td mat-cell *matCellDef="let element">{{ element.parentActivityName }}</td>
+            <ng-container matColumnDef="profileDescription">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Profile Description</th>
+                <td mat-cell *matCellDef="let element">{{ element.profileDescription }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="parentActivityID">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Parent Activity ID</th>
-                <td mat-cell *matCellDef="let element">{{ element.parentActivityID }}</td>
+            <ng-container matColumnDef="isActive">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Is Active</th>
+                <td mat-cell *matCellDef="let element">{{ element.isActive }}</td>
             </ng-container>
 
 
-            <ng-container matColumnDef="activityURL">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Activity URL</th>
-                <td mat-cell *matCellDef="let element">{{ element.activityURL }}</td>
+            <ng-container matColumnDef="created">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Created Date</th>
+                <td mat-cell *matCellDef="let element">{{ element.created }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="c">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">C</th>
-                <!-- <td mat-cell *matCellDef="let element">{{ element.c }}</td> -->
-                <td mat-cell *matCellDef="let element">
-                    <mat-checkbox [checked]="element.c? true : false" disabled="true"></mat-checkbox>
-                </td>
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Created By</th>
+                <td mat-cell *matCellDef="let element">{{ element.createdBy }}</td>
             </ng-container>
 
-            <ng-container matColumnDef="r">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">R</th>
-                <!-- <td mat-cell *matCellDef="let element">{{ element.r }}</td> -->
-                <td mat-cell *matCellDef="let element">
-                    <mat-checkbox [checked]="element.r ? true : false" disabled="true"></mat-checkbox>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="u">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">U</th>
-                <!-- <td mat-cell *matCellDef="let element">{{ element.u }}</td> -->
-                <td mat-cell *matCellDef="let element">
-                    <mat-checkbox [checked]="element.u ? true : false" disabled="true"></mat-checkbox>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="d">
-                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">D</th>
-                <!-- <td mat-cell *matCellDef="let element">{{ element.d }}</td> -->
-                <td mat-cell *matCellDef="let element">
-                    <mat-checkbox [checked]="element.d ? true : false" disabled="true"></mat-checkbox>
-                </td>
+            <ng-container matColumnDef="checked">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Checked</th>
+                <td mat-cell *matCellDef="let element">{{ element.checked }}</td>
             </ng-container>
 
             <ng-container matColumnDef="Action">

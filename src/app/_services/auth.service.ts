@@ -1,37 +1,17 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
-    private isloggedIn: boolean;
-    private userName:any;
- 
-    constructor() {
-        this.isloggedIn=false;
-    }
- 
-    login(username: string, password: string) {
-      debugger;
-        this.isloggedIn=true;
-        this.userName="admin";
-        return of(this.isloggedIn);
-    }
- 
-    isUserLoggedIn(): boolean {
+    isAuthenticate: boolean = false;
+    login(email: string, password: string): Observable<boolean> {
         debugger;
-        return this.isloggedIn;
-    }
- 
-    isAdminUser():boolean {
-        if (this.userName=='Admin') {
-            return true; 
+        if (email === 'admin' && password === 'admin') {
+            this.isAuthenticate = true;
+            return of(true);
         }
-        return false;
+        return of(false);
     }
-    
-    logoutUser(): void{
-        this.isloggedIn = false;
-    }
-  }
+}

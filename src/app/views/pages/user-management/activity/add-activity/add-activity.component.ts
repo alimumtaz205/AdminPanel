@@ -18,7 +18,7 @@ export interface Task {
 export class AddActivityComponent implements OnInit {
   public headerText: any = "Add Activity";
   public buttonText: any = "Add";
-  c_checked = false;
+  suctask_check: any[] | undefined;
   selected_activity = 'none';
   parent_activity: any;
   activity_id: string = "1";
@@ -27,6 +27,7 @@ export class AddActivityComponent implements OnInit {
   update: boolean = false;
   delete: boolean = false;
   activity_name: any;
+
   activityListModel: any[] = [
   ];
   addActivityForm!: FormGroup
@@ -40,6 +41,7 @@ export class AddActivityComponent implements OnInit {
       { name: 'D', completed: false },
     ],
   };
+  subtask: any;
 
 
   constructor(
@@ -56,9 +58,27 @@ export class AddActivityComponent implements OnInit {
       parent_activity: [''],
       activity_url: ['', Validators.required],
       list_all: [''],
-      list: ['', Validators.required],
+      list: [''],
 
     });
+    if (this.editData) {
+      debugger;
+      this.headerText = this.editData.header_text,
+        this.buttonText = "Update"
+      this.addActivityForm.controls['activity_name'].setValue(this.editData.activityDetails.activityName);
+      this.addActivityForm.controls['parent_activity'].setValue(this.editData.activityDetails.parentActivityName);
+      this.addActivityForm.controls['activity_url'].setValue(this.editData.activityDetails.activityURL);
+      debugger;
+      for (var item in this.task.subtasks) {
+        this.task.subtasks[0].completed = this.editData.activityDetails.c;
+        this.task.subtasks[1].completed = this.editData.activityDetails.r;
+        this.task.subtasks[2].completed = this.editData.activityDetails.u;
+        this.task.subtasks[3].completed = this.editData.activityDetails.d;
+      }
+
+      //this.addActivityForm.controls['list'].setValue(this.editData.activityDetails.r);
+      //this.addActivityForm.controls['university_description'].setValue(this.editData.universityDetails.description);
+    }
     this.getParentActivities(this.activity_id);
   }
 
@@ -70,6 +90,8 @@ export class AddActivityComponent implements OnInit {
 
   someComplete(): boolean {
 
+    this.suctask_check = this.task.subtasks;
+
     if (this.task.subtasks == null) {
       return false;
     }
@@ -77,8 +99,9 @@ export class AddActivityComponent implements OnInit {
   }
 
   setAll(completed: boolean) {
-
+    debugger
     this.allComplete = completed;
+
     if (this.task.subtasks == null) {
       return;
     }
@@ -111,13 +134,20 @@ export class AddActivityComponent implements OnInit {
   }
 
   addActivity() {
-    debugger;
-
+    debugger
     if (this.allComplete) {
       this.create = true;
       this.read = true;
       this.update = true;
       this.delete = true;
+    }
+    else {
+      for (var item in this.suctask_check) {
+        this.create = this.suctask_check[0].completed;
+        this.read = this.suctask_check[1].completed;
+        this.update = this.suctask_check[2].completed;
+        this.delete = this.suctask_check[3].completed;
+      }
     }
 
     this.parent_activity = this.addActivityForm.value.parent_activity;

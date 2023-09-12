@@ -1,42 +1,35 @@
-
 <body>
-    <div class="wrapper" >
+    <div class="wrapper">
         <div class="form-left">
             <div class="mb-3 pt-5 logo">
                 <img src="../../../../../assets/pages/img/Isolation_Mode.png" alt="logo" class="img-fluid">
-              </div>
+            </div>
             <p class="pe-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et molestie ac feugiat sed. Diam volutpat commodo.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Et molestie ac feugiat sed. Diam volutpat commodo.
             </p>
-            
+
         </div>
         <form class="form-right" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
             <h2 class="text-uppercase mt-2">Login</h2>
             <div class="row">
-                <div class="col-sm-12 mb-3">
-                    <label for="misdn">MSIDN</label>
-                    <input type="text" formArrayName="misdn" formControlName="misdn" class="input-field" placeholder="Enter MSIDN" id="misdn" required>
-                    <!-- <input type="text" name="first_name" id="first_name" [formContro]="misdn" class="input-field" placeholder="Enter MSIDN" required> -->
-                </div>
-                <!-- <div *ngIf="!misdn?.valid && (misdn?.dirty ||misdn?.touched)">
-                <div [hidden]="!misdn?.errors.required">
-                  First Name is required
-                </div>
-                <div [hidden]="!misdn.errors.minlength">
-                  Min Length is 10
-                </div>
-              </div> -->
+                <mat-form-field class="example-full-width">
+                    <mat-label>MISDN</mat-label>
+                    <input matInput placeholder="Enter MISDN" formControlName="misdn" maxlength="16" autocomplete="off">
+                    <mat-error *ngIf="hasError('misdn', 'required')">MISDN is <strong>required</strong> </mat-error>
+                    <mat-error *ngIf="hasError('misdn', 'minLength')">MISDN should contain atleat 5 characters
+                    </mat-error></mat-form-field>
             </div>
-            <div class="mb-3">
-                <label>Password</label>
-                <div class="d-flex">
-                    <!-- <input id="password" type="password" formControlName="password" class="input-field" placeholder="Enter MSIDN"> -->
-                    <input type="password" formArrayName="password" formControlName="password" class="input-field" name="password" required placeholder="Enter Password" id="id_password">
-                    <i class="far fa-eye" id="togglePassword" style="margin-left: -30px; cursor: pointer; margin-top: 14px;"></i>
-                </div>
-                
+            <div class="row">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Enter Password" formControlName="password" maxlength="16"
+                        autocomplete="off">
+                    <mat-error *ngIf="hasError('password', 'required')">Password is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
             </div>
-        
+
             <div class="mb-3 text-end">
                 <label class="option"><a href="forgot-password.html" class="text-secondary">Forget Password ?</a>
                 </label>
@@ -50,13 +43,13 @@
 </body>
 <script>
     const togglePassword = document.querySelector('#togglePassword');
-  const password = document.querySelector('#id_password');
+    const password = document.querySelector('#id_password');
 
-  togglePassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
 </script>

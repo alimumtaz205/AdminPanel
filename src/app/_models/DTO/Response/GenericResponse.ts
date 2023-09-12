@@ -1,8 +1,8 @@
 import { HttpStatusCode } from "@angular/common/http";
 
-export interface GenericResponse<T> {  
+export interface GenericResponse<T> {
   isSuccessful: boolean;
-  responseCode : HttpStatusCode;
-  message :string;
-  data: T;
+  responseCode: HttpStatusCode;
+  message: string;
+  data: any;
 }

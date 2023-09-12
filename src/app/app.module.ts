@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './views/pages/auth/login/login.component';
@@ -27,7 +26,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { AuthGuardService } from './_services/auth-guard.service';
 import { AuthService } from './_services/auth.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,6 +41,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ActivityComponent } from './views/pages/user-management/activity/activity.component';
 import { UserManagementModule } from './views/pages/user-management/user-management.module';
 import { AddActivityComponent } from './views/pages/user-management/activity/add-activity/add-activity.component';
+import { ProfileComponent } from './views/pages/user-management/profile/profile.component';
+import { AddProfileComponent } from './views/pages/user-management/profile/add-profile/add-profile.component';
+import { AuthGuard } from './views/pages/auth/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,9 @@ import { AddActivityComponent } from './views/pages/user-management/activity/add
     SubjectManagementComponent,
     AddCourseComponent,
     ActivityComponent,
-    AddActivityComponent
+    AddActivityComponent,
+    ProfileComponent,
+    AddProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -91,9 +94,10 @@ import { AddActivityComponent } from './views/pages/user-management/activity/add
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatFormFieldModule
   ],
-  providers: [AuthGuardService, AuthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

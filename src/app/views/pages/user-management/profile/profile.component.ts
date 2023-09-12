@@ -6,18 +6,21 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivityResponse } from 'src/app/_models/DTO/Response/Activity/ActivityResponse';
 import { ActivityService } from 'src/app/_services/activityService/activity.service';
 import Swal from 'sweetalert2';
-import { AddActivityComponent } from './add-activity/add-activity.component';
+import { AddProfileComponent } from './add-profile/add-profile.component';
+import { ProfileService } from 'src/app/_services/profileService/profile.service';
 
 @Component({
-  selector: 'app-activity',
-  templateUrl: './activity.component.html',
-  styleUrls: ['./activity.component.css']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
-export class ActivityComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   dataSource: any;
   selected: number = 1;
   displayedColumns: string[] =
-    ['activityID', 'activityName', 'parentActivityName', 'parentActivityID', 'activityURL', 'c', 'r', 'u', 'd', 'Action'];
+    ['profileID', 'profileName', 'profileDescription', 'isActive', 'created', 'createdBy', 'checked', 'Action'];
+
+
 
   clickedRows = new Set<ActivityResponse>();
   @ViewChild(MatSort)
@@ -26,20 +29,17 @@ export class ActivityComponent implements OnInit {
   selection: any;
 
   constructor(
-    private activityService: ActivityService,
+    private service: ProfileService,
     public dialogRef: MatDialog
   ) { }
 
   ngOnInit(): void {
-    var Id = 1;
-    this.getActivities(Id)
+    this.getProfile()
   }
 
 
-  getActivities(ID: any) {
-    debugger;
-
-    this.activityService.getActivities(ID)
+  getProfile() {
+    this.service.GetProfiles()
       .subscribe({
         next: (resp) => {
           if (resp.isSuccessful) {
@@ -57,13 +57,13 @@ export class ActivityComponent implements OnInit {
       });
   }
 
-  addActivity() {
-    this.dialogRef.open(AddActivityComponent, {
-      width: '40%',
+  addProfile() {
+    this.dialogRef.open(AddProfileComponent, {
+      width: '60%',
+      height: '80%'
     }).afterClosed().subscribe(val => {
       if (val === 'add') {
-        debugger
-        this.getActivities(this.selected);
+        this.getProfile();
       }
     })
   }
@@ -71,7 +71,7 @@ export class ActivityComponent implements OnInit {
 
   updateActivity(element: any) {
     debugger;
-    this.dialogRef.open(AddActivityComponent, {
+    this.dialogRef.open(AddProfileComponent, {
       width: '40%',
       data: {
         header_text: 'Update Activity',
@@ -80,7 +80,7 @@ export class ActivityComponent implements OnInit {
       }
     }).afterClosed().subscribe(val => {
       if (val === 'update') {
-        this.getActivities(this.selected);
+        this.getProfile();
       }
     })
   }
