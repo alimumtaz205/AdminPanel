@@ -1,35 +1,60 @@
-<!-- add university modal -->
-
-<div class="modal-header text-white bg-theme">
-    <h5 class="modal-title">{{headerText}}</h5>
-    <button type="button" class="btn-close btn-close-white" [mat-dialog-close]="" aria-label="Close"></button>
-</div>
-<form class="form-right" [formGroup]="addProfileForm">
-
-    <div class="container">
-        <div class="row">
-
-            <mat-form-field class="example-full-width">
-                <mat-label>Profile Name</mat-label>
-                <input matInput placeholder="Enter Profile Name" formControlName="profile_name" maxlength="60"
-                    autocomplete="off">
-                <mat-error *ngIf="hasError('profile_name', 'required')">Profile Name is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
+<div class="kt-portlet" [ngClass]="{
+		'kt-portlet--body-progress': viewLoading,
+		'kt-portlet--body-progress-overlay': loadingAfterSubmit
+	}">
+    <div class="kt-portlet__head kt-portlet__head__custom" id="list-header">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">{{ getTitle() }}</h3>
         </div>
-        <div class="row">
-            <mat-form-field>
-                <mat-label>Profile Description</mat-label>
-                <input matInput placeholder="Enter Profile Description" formControlName="profile_description"
-                    maxlength="200" autocomplete="off">
-                <mat-error *ngIf="hasError('profile_description', 'required')">Profile Description is
-                    <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
-        </div>
+    </div>
+    <div>
+        <div class="kt-portlet__body">
+            <form [formGroup]="profileForm" class="kt-form">
+                <div class="kt-form">
+                    <!-- <div class="kt-portlet__body-progress">
+                        <mat-spinner [diameter]="20"></mat-spinner>
+                    </div> -->
 
-        <div class="form-group row">
-            <div class="col-lg-12 col-md-12 kt-margin-bottom-20-mobile mat-elevation-z8">
+                    <!-- <kt-alert
+						*ngIf="hasFormErrors"
+						type="warn"
+						[duration]="30000"
+						[showCloseButton]="true"
+						(close)="onAlertClose($event)"
+					>
+						Oh snap! Change a few things up and try submitting
+						again.
+					</kt-alert> -->
+
+                    <div class="form-group row">
+                        <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Profile Name" formControlName="profileName"
+                                    maxlength="60" autocomplete="off" />
+                                <mat-error *ngIf="hasError('profileName', 'required')">Name <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Description" formControlName="profileDescription"
+                                    maxlength="200" autocomplete="off" />
+                                <mat-error *ngIf="
+										hasError(
+											'profileDescription',
+											'required'
+										)
+									">Description
+                                    <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group row">
+                <!-- <div class="col-lg-12 col-md-12 kt-margin-bottom-20-mobile mat-elevation-z8"
+                    [style.height]="gridHeight"> -->
                 <div *ngIf="!isActivityStringValid">
                     <mat-error><strong>Please select any activity</strong></mat-error>
                 </div>
@@ -39,34 +64,31 @@
                         <ng-container matColumnDef="activityName">
                             <mat-header-cell style="min-width: 250px; max-width: 250px" *matHeaderCellDef
                                 mat-sort-header>Activity Name</mat-header-cell>
-                            <mat-cell style="min-width: 250px; max-width: 250px;" *matCellDef="let activity"
+                            <mat-cell style="min-width: 250px; max-width: 250px" *matCellDef="let activity"
                                 class="mat-column-checkbox">
-                                <mat-checkbox class="example-margin" formControlName="select_all"
-                                    [(ngModel)]="activity.isActivityChecked" (change)="
-                                        changeActivityCheckbox(
-                                            activity.activityID,
-                                            $event.checked
-                                        )
-                                    "></mat-checkbox>
+                                <mat-checkbox class="example-margin" [(ngModel)]="activity.isActivityChecked" (change)="
+											changeActivityCheckbox(
+												activity.activityID,
+												$event.checked
+											)
+										"></mat-checkbox>
                                 &nbsp;&nbsp;
                                 <span [class.boldCell]="
-                                        activity.parentActivityID == 0
-                                    ">{{ activity.activityName }}</span>
+											activity.parentActivityID == 0
+										">{{ activity.activityName }}</span>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="create">
-                            <mat-header-cell style="max-width: 250px" *matHeaderCellDef mat-sort-header>Create
+                            <mat-header-cell style="min-width: 100px; max-width: 150px" *matHeaderCellDef
+                                mat-sort-header>Create
                             </mat-header-cell>
-                            <mat-cell style="max-width: 250px" *matCellDef="let activity">
-                                <mat-checkbox formControlName="create" *ngIf="activity.parentActivityID != 0"
-                                    class="example-margin" [(ngModel)]="activity.c" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+                            <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
+                                <mat-checkbox class="example-margin" [(ngModel)]="activity.c" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
                         </ng-container>
 
@@ -74,14 +96,11 @@
                             <mat-header-cell style="min-width: 100px; max-width: 150px" *matHeaderCellDef
                                 mat-sort-header>Read</mat-header-cell>
                             <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
-                                <mat-checkbox formControlName="read" *ngIf="activity.parentActivityID != 0"
-                                    class="example-margin" [(ngModel)]="activity.r" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+                                <mat-checkbox class="example-margin" [(ngModel)]="activity.r" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
                         </ng-container>
 
@@ -89,14 +108,11 @@
                             <mat-header-cell style="min-width: 100px; max-width: 150px" *matHeaderCellDef
                                 mat-sort-header>Update</mat-header-cell>
                             <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
-                                <mat-checkbox formControlName="update" *ngIf="activity.parentActivityID != 0"
-                                    class="example-margin" [(ngModel)]="activity.u" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+                                <mat-checkbox class="example-margin" [(ngModel)]="activity.u" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
                         </ng-container>
 
@@ -104,29 +120,26 @@
                             <mat-header-cell style="min-width: 100px; max-width: 150px" *matHeaderCellDef
                                 mat-sort-header>Delete</mat-header-cell>
                             <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
-                                <mat-checkbox formControlName="delete" *ngIf="activity.parentActivityID != 0"
-                                    class="example-margin" [(ngModel)]="activity.d" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+                                <mat-checkbox class="example-margin" [(ngModel)]="activity.d" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="export">
+                        <!-- <ng-container matColumnDef="export">
                             <mat-header-cell style="min-width: 100px; max-width: 150px" *matHeaderCellDef
                                 mat-sort-header>Export</mat-header-cell>
                             <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
                                 <mat-checkbox *ngIf="activity.parentActivityID != 0" class="example-margin"
                                     [(ngModel)]="activity.e" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+											activity.parentActivityID == 0
+										" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
                         </ng-container>
 
@@ -136,36 +149,69 @@
                             <mat-cell style="min-width: 100px; max-width: 150px" *matCellDef="let activity">
                                 <mat-checkbox *ngIf="activity.parentActivityID != 0" class="example-margin"
                                     [(ngModel)]="activity.ex" [disabled]="
-                                        activity.parentActivityID == 0
-                                    " (change)="
-                                        changeActivityItemCheckbox(
-                                            activity.activityID
-                                        )
-                                    "></mat-checkbox>
+											activity.parentActivityID == 0
+										" (change)="
+											changeActivityItemCheckbox(
+												activity.activityID
+											)
+										"></mat-checkbox>
                             </mat-cell>
-                        </ng-container>
+                        </ng-container> -->
 
                         <mat-header-row *matHeaderRowDef="
-                                displayedColumns;
-                                sticky: true
-                            " class="table-header-background"></mat-header-row>
+									displayedColumns;
+									sticky: true
+								" class="table-header-background"></mat-header-row>
 
                         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
                     </mat-table>
 
-                    <!-- <div class="mat-table__message" *ngIf="!loading && dataSource.data.length == 0">
+                    <div class="mat-table__message" *ngIf="!loading && dataSource.data.length == 0">
                         No records found
-                    </div> -->
+                    </div>
                     <div class="mat-table__message" *ngIf="loading">
                         Please wait....
+                    </div>
+                </div>
+                <!--<table class="mat-table">
+		<tr class="mat-header-row">
+			<th class="mat-header-cell" style="min-width: 280px;font-weight:bold;max-height:300px;">Activity Name</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Create</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Read</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Update</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Delete</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Export</th>
+			<th class="mat-header-cell" style="min-width: 100px;font-weight:bold;max-height:120px;">Extra</th>
+		</tr>
+		<tr class="mat-row" *ngFor="let activity of activities">
+			<td class="mat-cell"><mat-checkbox class="example-margin" [(ngModel)]="activity.isActivityChecked" (change)="changeActivityCheckbox(activity.activityID, $event.checked)"></mat-checkbox> &nbsp;&nbsp; <span [class.boldCell]="activity.parentActivityID==0">{{activity.activityName}}</span></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.c" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.r" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.u" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.d" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.e" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+			<td class="mat-cell"><mat-checkbox *ngIf="activity.parentActivityID!=0" class="example-margin" [(ngModel)]="activity.ex" [disabled]="activity.parentActivityID==0" (change)="changeActivityItemCheckbox(activity.activityID)"></mat-checkbox></td>
+		</tr>
+	</table>-->
+
+            </div>
+        </div>
+        <div class="kt-form kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+            <div class="kt-form__actions kt-form__actions--solid">
+                <div class="row text-right">
+                    <div class="col-lg-12 mt-4">
+                        <button type="button" class="button-red" mat-raised-button [mat-dialog-close]="data.animal"
+                            cdkFocusInitial>
+                            Cancel</button>&nbsp;
+                        <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [ngClass]="{
+								'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light':
+									loading
+							}" [disabled]="viewLoading || submitted">
+                            Save
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="modal-footer border-0">
-        <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
-        <button type="button" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
-    </div>
-</form>
+</div>

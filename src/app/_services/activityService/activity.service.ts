@@ -6,6 +6,8 @@ import { GenericResponse } from 'src/app/_models/DTO/Response/GenericResponse';
 import { UniversityResponse } from 'src/app/_models/DTO/Response/UniversityResponse';
 import { environment } from 'src/environments/environment';
 import { ActivityResponse } from 'src/app/_models/DTO/Response/Activity/ActivityResponse';
+import { BaseResponseModel } from 'src/app/_models/_crud/_base.response.model';
+import { PagesEnum } from 'src/app/_models/enums/pages.enum';
 
 @Injectable({
   providedIn: 'root'

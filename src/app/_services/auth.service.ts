@@ -5,10 +5,14 @@ import { Observable, of } from 'rxjs';
     providedIn: 'root'
 })
 export class AuthService {
+
     isAuthenticate: boolean = false;
-    login(email: string, password: string): Observable<boolean> {
+
+    login(token: string, userId: string): Observable<boolean> {
         debugger;
-        if (email === 'admin' && password === 'admin') {
+        userId = JSON.parse(localStorage.getItem("loginUserId") || '{}');
+        token = JSON.parse(localStorage.getItem('token') || '{}');
+        if (userId.length > 0 && token.length > 0) {
             this.isAuthenticate = true;
             return of(true);
         }

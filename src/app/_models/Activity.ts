@@ -1,9 +1,9 @@
 export class Activity {
-    activityID: number | undefined;
-    activityName: string | undefined;
-    activityURL: string | undefined;
-    parentActivityID?: number;
-    isActivityChecked: boolean | undefined;
+    activityID: number;
+    activityName: string;
+    activityURL: string;
+    parentActivityID: number;
+    isActivityChecked: boolean;
     isActive: boolean = false;
     isAdmin: boolean = false;
     isReadOnly: boolean = false;

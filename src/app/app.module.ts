@@ -44,6 +44,18 @@ import { AddActivityComponent } from './views/pages/user-management/activity/add
 import { ProfileComponent } from './views/pages/user-management/profile/profile.component';
 import { AddProfileComponent } from './views/pages/user-management/profile/add-profile/add-profile.component';
 import { AuthGuard } from './views/pages/auth/guards/auth.guard';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { KtDialogService } from './_services/kt-dialog.service';
+import { DeleteEntityDialogComponent } from './_models/_crud/alert/delete-entity-dialog/delete-entity-dialog.component';
+import { ActionNotificationComponent } from './_models/_crud/alert/action-notification/action-notification.component';
+import { FetchEntityDialogComponent } from './_models/_crud/alert/fetch-entity-dialog/fetch-entity-dialog.component';
+import { UpdateStatusDialogComponent } from './_models/_crud/alert/update-status-dialog/update-status-dialog.component';
+import { AlertDialogComponent } from './_models/_crud/alert/alert-dialog/alert-dialog.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslateModule } from '@ngx-translate/core';
+import { AuthorizationService } from './_services/_global/authorization.service';
+import { HttpUtilsService } from './_services/_global/http-utils.service';
 
 @NgModule({
   declarations: [
@@ -70,7 +82,12 @@ import { AuthGuard } from './views/pages/auth/guards/auth.guard';
     ActivityComponent,
     AddActivityComponent,
     ProfileComponent,
-    AddProfileComponent
+    AddProfileComponent,
+    DeleteEntityDialogComponent,
+    ActionNotificationComponent,
+    FetchEntityDialogComponent,
+    UpdateStatusDialogComponent,
+    AlertDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -95,9 +112,14 @@ import { AuthGuard } from './views/pages/auth/guards/auth.guard';
     MatIconModule,
     MatDialogModule,
     MatCheckboxModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+    TranslateModule
   ],
-  providers: [],
+  providers: [KtDialogService, AuthorizationService, HttpUtilsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

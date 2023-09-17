@@ -12,21 +12,50 @@
         </div>
         <form class="form-right" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
             <h2 class="text-uppercase mt-2">Login</h2>
-            <div class="row">
-                <mat-form-field class="example-full-width">
-                    <mat-label>MISDN</mat-label>
-                    <input matInput placeholder="Enter MISDN" formControlName="misdn" maxlength="16" autocomplete="off">
-                    <mat-error *ngIf="hasError('misdn', 'required')">MISDN is <strong>required</strong> </mat-error>
-                    <mat-error *ngIf="hasError('misdn', 'minLength')">MISDN should contain atleat 5 characters
-                    </mat-error></mat-form-field>
-            </div>
-            <div class="row">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Password</mat-label>
-                    <input matInput placeholder="Enter Password" formControlName="password" maxlength="16"
-                        autocomplete="off">
-                    <mat-error *ngIf="hasError('password', 'required')">Password is <strong>required</strong>
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-label>Username</mat-label>
+                    <input matInput type="username" placeholder="Username" formControlName="username" maxlength="320"
+                        autocomplete="off" />
+                    <mat-error *ngIf="isControlHasError('username','required')">
+                        <strong>Username is required</strong>
                     </mat-error>
+                    <mat-error *ngIf="isControlHasError('username','username')">
+                        <strong>{{ 'AUTH.VALIDATION.INVALID_FIELD' }}</strong>
+                    </mat-error>
+                    <mat-error *ngIf="isControlHasError('username','maxlength')">
+                        <strong>User should not be greater than 320 character</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" placeholder="Password" formControlName="password" minlength="3"
+                        maxlength="16" autocomplete="off" />
+                    <mat-error *ngIf="isControlHasError('password','required')">
+                        <strong>Password is required</strong>
+                    </mat-error>
+                    <!-- <mat-error *ngIf="isControlHasError('password','minLength')">
+                        <strong>Must be at least 8 characters!</strong>
+                    </mat-error>
+                    <mat-error *ngIf="isControlHasError('password','maxLength')">
+                        <strong>Must max length is 16.</strong>
+                    </mat-error>
+
+                    <mat-error *ngIf="isControlHasError('password','hasCapitalCase')">
+                        <strong>Must contain at least 1 in Capital Case!</strong>
+                    </mat-error>
+                    <mat-error *ngIf="isControlHasError('password','hasNumber')">
+                        <strong>Must contain at least 1 number!</strong>
+                    </mat-error>
+                    <mat-error *ngIf="isControlHasError('password','hasSmallCase')">
+                        <strong>Must contain at least 1 Letter in Small Case!</strong>
+                    </mat-error>
+                    <mat-error *ngIf="isControlHasError('password','hasSpecialCharacters')">
+                        <strong>Must contain at least 1 Special Character!</strong>
+                    </mat-error>-->
                 </mat-form-field>
             </div>
 

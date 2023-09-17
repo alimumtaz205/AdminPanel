@@ -8,6 +8,9 @@ import { ActivityService } from 'src/app/_services/activityService/activity.serv
 import Swal from 'sweetalert2';
 import { AddProfileComponent } from './add-profile/add-profile.component';
 import { ProfileService } from 'src/app/_services/profileService/profile.service';
+import { Profile } from 'src/app/_models/Profile';
+import { UtilsService } from 'src/app/_services/_global/utils.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +33,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private service: ProfileService,
-    public dialogRef: MatDialog
+    public dialogRef: MatDialog,
+    private layoutUtilsService: UtilsService,
   ) { }
 
   ngOnInit(): void {
@@ -57,17 +61,69 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  // addProfile() {
+  //   this.dialogRef.open(AddProfileComponent, {
+  //     width: '60%',
+  //     height: '80%'
+  //   }).afterClosed().subscribe(val => {
+  //     if (val === 'add') {
+  //       this.getProfile();
+  //     }
+  //   })
+  // }
+
   addProfile() {
-    this.dialogRef.open(AddProfileComponent, {
-      width: '60%',
-      height: '80%'
-    }).afterClosed().subscribe(val => {
-      if (val === 'add') {
-        this.getProfile();
-      }
-    })
+    const newProfile = new Profile();
+    //newRole.clear(); // Set all defaults fields
+    this.editProfile(newProfile);
   }
 
+  editProfile(profile: Profile) {
+    debugger
+    var width = (window.innerWidth - 150) + 'px';
+    var height = (window.innerHeight - 140) + 'px';
+    console.info(width);
+    console.info(height);
+    const dialogRef = this.dialogRef.open(AddProfileComponent, { height: height, width: width, data: { profile: profile }, disableClose: true });
+    dialogRef.afterClosed().subscribe(res => {
+      if (!res) {
+        debugger;
+        return;
+      }
+
+      this.getProfile();
+    });
+  }
+
+
+  deleteProfile(_item: Profile) {
+    const _title = 'Profile';
+    const _description = 'Are you sure to permanently delete this profile?';
+    const _waitDesciption = 'Profile is deleting...';
+
+    const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
+    dialogRef.afterClosed().subscribe(res => {
+      if (!res) {
+        return;
+      }
+
+      this.service.deleteProfile(_item.profileID).pipe(
+        finalize(() => {
+
+        })
+      ).subscribe((baseResponse) => {
+        if (baseResponse.isSuccessful) {
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+          this.getProfile();
+        }
+        else
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+
+        //this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/DeleteProfile', AE.Delete, baseResponse.isSuccess);
+      });
+
+    });
+  }
 
   updateActivity(element: any) {
     debugger;

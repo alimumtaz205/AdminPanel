@@ -23,17 +23,15 @@ const routes: Routes = [
     children: [{
       path: '',
       component: LoginComponent
-    }
-    ]
+    }]
   },
   {
     path: '',
     component: HomeLayoutComponent,
-    canActivate: [AuthGuard],
     children: [
       {
         path: 'home',
-        component: HomeComponent, canActivate: [AuthGuard]
+        component: HomeComponent,
       },
       {
         path: 'inquiry-managemnt',

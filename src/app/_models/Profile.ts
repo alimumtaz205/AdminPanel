@@ -1,16 +1,17 @@
 
 
 export class Profile {
-    profileID: number | undefined;
-    profileName: string | undefined;
-    profileDescription: string | undefined;
-    activitiesList: string | undefined;
-    channel: number | undefined;
+    profileID: number;
+    profileName: string;
+    profileDescription: string;
+    activitiesList: string;
+    channel: number;
 
-    activitiesListAdd: string | undefined;
-    activitiesListDelete: string | undefined;
+    activitiesListAdd: string;
+    activitiesListDelete: string;
     //used in create user form to check if user have selected profile
-    isSelected: boolean | undefined;
+    isSelected: boolean;
+    userInfo: any;
     //userInfo: UserInfoModel;
 }
 

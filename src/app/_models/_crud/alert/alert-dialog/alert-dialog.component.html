@@ -1,0 +1,39 @@
+<div class="kt-portlet">
+    <div class="kt-portlet__head kt-portlet__head__custom">
+        <div class="kt-portlet__head-progress">
+            <!-- here can place a progress bar-->
+            <mat-progress-bar mode="indeterminate" *ngIf="viewLoading"></mat-progress-bar>
+        </div>
+        <div class="kt-portlet__head-label">
+            <div class="kt-header__brand-logo mr-3">
+                <a href="javascript:;" routerLink="/">
+                    <img alt="logo" [attr.src]="headerLogo" style="width:35px;" />
+                </a>
+            </div>
+            <h3 class="kt-portlet__head-title"> A Panel</h3>
+            <!--<h3 class="kt-portlet__head-title">{{data.title}}</h3>-->
+            <span class="kt-portlet__head-icon kt-hide">
+                <i class="la la-gear"></i>
+            </span>
+        </div>
+    </div>
+    <div class="kt-form">
+        <div class="kt-portlet__body">
+            <div class="form-group kt-form__group row p-3">
+                <div class="col-lg-12" *ngIf="data.code">
+                    <span style="font-weight:500">Error Code:&nbsp; {{data.code}}</span>
+                </div>
+                <div class="col-lg-12 mt-1">
+                    <span style="font-weight:500">{{data.description}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit text-right">
+            <div class="kt-form__actions kt-form__actions--sm">
+                <!--<button mat-button (click)="onNoClick()">Cancel</button>&nbsp;-->
+                <button mat-button (click)="onNoClick()" color="primary" cdkFocusInitial
+                    [disabled]="viewLoading">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

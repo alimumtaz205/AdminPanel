@@ -1,11 +1,23 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable, Subscription } from 'rxjs';
+import { Activity } from 'src/app/_models/Activity';
 import { ActivityResponse } from 'src/app/_models/DTO/Response/Activity/ActivityResponse';
+import { Profile } from 'src/app/_models/Profile';
+import { Permission } from 'src/app/_models/permission.model';
 import { ActivityService } from 'src/app/_services/activityService/activity.service';
 import { ProfileService } from 'src/app/_services/profileService/profile.service';
+
+import { delay, finalize } from 'rxjs/operators';
+import { KtDialogService } from 'src/app/_services/kt-dialog.service';
+import { AuditTrailService } from 'src/app/_services/audit-trail/audit-trail.service';
+import { BaseResponseModel } from 'src/app/_models/_crud/_base.response.model';
 import Swal from 'sweetalert2';
+
 
 export interface Task {
   name: string;
@@ -19,252 +31,374 @@ export interface Task {
   styleUrls: ['./add-profile.component.css']
 })
 export class AddProfileComponent implements OnInit {
-  public headerText: any = "Add Profile";
-  public buttonText: any = "Add";
-  suctask_check: any[] | undefined;
-  selected_activity = 'none';
-  parent_activity: any;
-  activity_id: string = "1";
-  create: boolean = false;
-  read: boolean = false;
-  update: boolean = false;
-  delete: boolean = false;
+  dataSource = new MatTableDataSource();
+  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  // displayedColumns = ['activityName', 'create', 'read', 'update', 'delete', 'export', 'extra'];
+  displayedColumns = ['activityName', 'create', 'read', 'update', 'delete'];
+
+  // Public properties
   loading: boolean;
-  activity_name: any;
-  profileName: any;
-  profileDescription: any;
-  dataSource: any;
-  parentActivityID: boolean = false;
-  isActivityStringValid: boolean = false;
-  displayedColumns: string[] =
-    ['activityName', 'create', 'read', 'update', 'delete', 'export'];
-
-  clickedRows = new Set<ActivityResponse>();
-  activityListModel: any[] = [
-  ];
-  addProfileForm!: FormGroup
-  task: Task = {
-    name: 'All',
-    completed: false,
-    subtasks: [
-      { name: 'C', completed: false },
-      { name: 'R', completed: false },
-      { name: 'U', completed: false },
-      { name: 'D', completed: false },
-    ],
-  };
-  subtask: any;
-  sort: any;
+  saving = false;
+  submitted = false;
+  profileForm: FormGroup;
+  profile: Profile = new Profile();
+  hasFormErrors = false;
+  viewLoading = false;
+  loadingAfterSubmit = false;
+  allPermissions$: Observable<Permission[]>;
+  rolePermissions: Permission[] = [];
+  activities: Activity[];
+  activitiesList: string;
+  isActivityStringValid: boolean;
   gridHeight: string;
+  activity_Id: number = 1;
+  isDisabled: boolean;
 
+  // Private properties
+  private componentSubscriptions: Subscription;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public editData: any,
+  constructor(public dialogRef: MatDialogRef<AddProfileComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    //private store: Store<AppState>,
+    private _profileService: ProfileService,
     private formBuilder: FormBuilder,
-    private activityService: ActivityService,
-    private service: ProfileService,
-    private dialogRef: MatDialogRef<AddProfileComponent>
+    private ktDialogService: KtDialogService,
+    private _activityService: ActivityService,
+    private auditService: AuditTrailService
+    //private _snackBar: MatSnackBar
   ) { }
 
-  ngOnInit(): void {
 
-    this.addProfileForm = this.formBuilder.group({
-      profile_name: ['', [Validators.required, Validators.maxLength(60)]],
-      profile_description: ['', [Validators.required, Validators.maxLength(200)]],
-      select_all: [''],
-      create: [''],
-      read: [''],
-      update: [''],
-      delete: [''],
-      export: [''],
-      //activities_list: ['']
+  ngOnInit() {
+    debugger
+    this.isActivityStringValid = true;
+    this.profileForm = this.formBuilder.group({
+      profileName: ['', [Validators.required, Validators.maxLength(60)]],
+      profileDescription: ['', [Validators.required, Validators.maxLength(200)]]
     });
-    if (this.editData) {
+
+    this._activityService.getActivities(this.activity_Id).subscribe((response) => {
       debugger;
-      this.headerText = this.editData.header_text,
-        this.buttonText = "Update"
-      this.addProfileForm.controls['profile_name'].setValue(this.editData.activityDetails.activityName);
-      this.addProfileForm.controls['profile_description'].setValue(this.editData.activityDetails.parentActivityName);
-      this.addProfileForm.controls['activities_list'].setValue(this.editData.activityDetails.activityURL);
-    }
-    this.getActivities(1)
+      this.activities = response.data;
+      this.dataSource.data = response.data;
+      this.activities.forEach((o, i) => {
+        debugger
+
+        o.c = false;
+        o.r = false;
+        o.u = false;
+        o.d = false;
+
+        o.isActive = false;
+        o.isAdmin = false;
+        // o.e = false;
+        // o.ex = false;
+      });
+      this.getProfile();
+    });
+
+    // this.auditService.create(PagesEnum.profilesUrl, 'Profile Form', AE.Navigate, true);
   }
 
   ngAfterViewInit() {
     this.gridHeight = window.innerHeight - 390 + 'px';
   }
 
-  hasError(controlName: string, errorName: string): boolean {
-    return this.addProfileForm.controls[controlName].hasError(errorName);
+  getProfile() {
+    debugger
+    if (this.data.profile && this.data.profile.profileID) {
+      this.loading = true;
+
+      this.profile = this.data.profile;
+      this._profileService
+        .getProfileByID(this.profile.profileID)
+        .pipe(
+          finalize(() => {
+            this.loading = false;
+          })
+        )
+        .subscribe((baseResponse) => {
+          if (baseResponse.isSuccessful) {
+            var userActivities = baseResponse.data;
+            this.activities = userActivities;
+            debugger
+            console.log(baseResponse)
+            var childActivities = this.activities.filter(x => 1 == 1);
+            childActivities.forEach((o, i) => {
+              this.activities.forEach((oo, i) => {
+                if (o.activityID == oo.activityID) {
+                  oo.c = o.c;
+                  oo.r = o.r;
+                  oo.u = o.u;
+                  oo.d = o.d;
+                  oo.e = o.e;
+                  oo.ex = o.ex;
+                }
+              });
+              this.changeActivityItemCheckbox(o.activityID);
+            });
+
+            this.profileForm.controls['profileName'].setValue(this.profile.profileName);
+            this.profileForm.controls['profileDescription'].setValue(this.profile.profileDescription);
+          }
+          else {
+            //  this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+          }
+
+          // this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/GetProfileByID', AE.Get, baseResponse.isSuccess);
+        });
+    }
   }
 
-  changeActivityItemCheckbox(activityId: number) {
-    debugger
-    // this.isActivityStringValid = true;
-    // var parent = this.activities.filter(x => x.activityID == activityId)[0];
+  cbti(value: boolean) {
+    if (value)
+      return '1';
+    return '0';
+  }
 
-    // this.activities.forEach((o, i) => {
-    //   if (o.activityID == activityId) {
-    //     if (o.c == true || o.r == true || o.u == true || o.d == true || o.e == true || o.ex == true) {
-    //       o.isActivityChecked = true;
-    //       parent.isActivityChecked = true;
-    //     }
-    //     else {
-    //       o.isActivityChecked = false;
-    //     }
-    //   }
-    // });
-    // this.checkParentActivityCheckbox(activityId);
+  // private addCheckboxes() {
+  //   this.activities.forEach((o, i) => {
+  //     const control = new FormControl(); // if first item set to true, else false
+  //     (this.profileForm.controls.orders as FormArray).push(control);
+  //   });
+  // }
+
+  hasError(controlName: string, errorName: string): boolean {
+    return this.profileForm.controls[controlName].hasError(errorName);
   }
 
   changeActivityCheckbox(activityId: number, value: boolean) {
 
-    // console.log("Hamza Parus ")
-    // debugger;
-    // this.isActivityStringValid = true;
-    // var activity = this.activities.filter(x => x.activityID == activityId)[0];
-    // if (activity.parentActivityID == 0) {
-    //   var childActivities = this.activities.filter(x => x.parentActivityID == activityId);
-    //   childActivities.forEach((o, i) => {
-    //     console.log('Hi');
-    //     this.activities.forEach((oo, i) => {
-    //       if (oo.activityID == o.activityID) {
-    //         oo.c = value;
-    //         oo.r = value;
-    //         oo.u = value;
-    //         oo.d = value;
-    //         oo.e = value;
-    //         oo.ex = value;
-    //         oo.isActivityChecked = value;
-    //       }
-    //     })
-    //   });
-    // }
-    // else {
-    //   this.activities.forEach((o, i) => {
-    //     if (o.activityID == activityId) {
-    //       o.c = value;
-    //       o.r = value;
-    //       o.u = value;
-    //       o.d = value;
-    //       o.e = value;
-    //       o.ex = value;
-    //     }
-    //   });
-    //   this.checkParentActivityCheckbox(activityId);
-    // }
-
-  }
-  getActivities(ID: any) {
     debugger;
+    this.isActivityStringValid = true;
+    var activity = this.activities.filter(x => x.activityID == activityId)[0];
 
-    this.activityService.getActivities(ID)
-      .subscribe({
-        next: (resp) => {
-          if (resp.isSuccessful) {
-            debugger;
-            this.dataSource = new MatTableDataSource(resp.data);
-            this.dataSource.sort = this.sort;
+    if (activity.parentActivityID == 0) {
+      var childActivities = this.activities.filter(x => x.parentActivityID == activityId);
+      childActivities.forEach((o, i) => {
+        this.activities.forEach((oo, i) => {
+          if (oo.activityID == o.activityID) {
+            oo.c = value;
+            oo.r = value;
+            oo.u = value;
+            oo.d = value;
+            // oo.e = value;
+            // oo.ex = value;
+            oo.isActivityChecked = value;
           }
-          else {
-            debugger;
+        })
+      });
+      {
+        this.activities.forEach((o, i) => {
+          if (o.activityID == activityId) {
+            o.c = false;
+            o.r = false;
+            o.u = false;
+            o.d = false;
+            // o.e = value;
+            // o.ex = value;
           }
-          console.error();
-
+        });
+        this.checkParentActivityCheckbox(activityId);
+      }
+    }
+    // else {
+    {
+      this.activities.forEach((o, i) => {
+        if (o.activityID == activityId) {
+          o.c = value;
+          o.r = value;
+          o.u = value;
+          o.d = value;
+          // o.e = value;
+          // o.ex = value;
         }
       });
-  }
-  allComplete: boolean = false;
-
-  updateAllComplete() {
-    this.allComplete = this.task.subtasks != null && this.task.subtasks.every(t => t.completed);
-  }
-
-  someComplete(): boolean {
-
-    this.suctask_check = this.task.subtasks;
-
-    if (this.task.subtasks == null) {
-      return false;
+      this.checkParentActivityCheckbox(activityId);
     }
-    return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+
   }
 
-  setAll(completed: boolean) {
+  changeActivityItemCheckbox(activityId: number) {
     debugger
-    this.allComplete = completed;
+    this.isActivityStringValid = true;
+    var parent = this.activities.filter(x => x.activityID == activityId)[0];
 
-    if (this.task.subtasks == null) {
-      return;
-    }
-    this.task.subtasks.forEach(t => (t.completed = completed));
-  }
-
-
-  onSubmit() {
-    debugger;
-    if (this.addProfileForm.valid) {
-      if (!this.editData) {
-
-        this.profileName = this.addProfileForm.value.profile_name;
-        this.profileDescription = this.addProfileForm.value.profile_description
-        this.addProfile(this.profileName, this.profileDescription);
-      }
-      else {
-        //this.updateUniversity();
-      }
-    }
-  }
-
-  addProfile(profileName: any, profileDescription: any) {
-    debugger
-    if (this.allComplete) {
-      this.create = true;
-      this.read = true;
-      this.update = true;
-      this.delete = true;
-    }
-    else {
-      for (var item in this.suctask_check) {
-        this.create = this.suctask_check[0].completed;
-        this.read = this.suctask_check[1].completed;
-        this.update = this.suctask_check[2].completed;
-        this.delete = this.suctask_check[3].completed;
-      }
-    }
-
-    this.parent_activity = this.addProfileForm.value.parent_activity;
-    if (this.parent_activity === "") {
-      this.parent_activity = 0
-    }
-
-    var formData = {
-      profileName: profileName,
-      profileDescription: profileDescription,
-      activitiesList: "",
-    }
-
-    this.service.addProfile(formData).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        //this.countryListModel = resp.data;
-        Swal.fire(
-          'Great!',
-          resp.message,
-          'success'
-        )
-        this.addProfileForm.reset();
-        this.dialogRef.close('add');
-      }
-      else {
-        debugger;
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-          footer: 'Error message' + resp.message
-        })
+    this.activities.forEach((o, i) => {
+      if (o.activityID == activityId) {
+        if (o.c == true || o.r == true || o.u == true || o.d == true) {
+          o.isActivityChecked = true;
+          parent.isActivityChecked = true;
+        }
+        else {
+          o.isActivityChecked = false;
+        }
       }
     });
+    this.checkParentActivityCheckbox(activityId);
+  }
+
+  checkParentActivityCheckbox(activityId: number) {
+    debugger;
+    var parentActivityId = this.activities.filter(x => x.activityID == activityId)[0].parentActivityID;
+    var isParentChecked = false;
+    var childActivities = this.activities.filter(x => x.parentActivityID == parentActivityId);
+    childActivities.forEach((o, i) => {
+      if (o.isActivityChecked == true)
+        isParentChecked = true;
+    });
+
+    this.activities.forEach((o, i) => {
+      if (o.activityID == parentActivityId) {
+        o.isActivityChecked = isParentChecked;
+      }
+    });
+  }
+
+  onSubmit(): void {
+    debugger
+
+    console.log(this.activities);
+    this.hasFormErrors = false;
+    if (this.profileForm.invalid) {
+      const controls = this.profileForm.controls;
+      Object.keys(controls).forEach(controlName =>
+        controls[controlName].markAsTouched()
+      );
+
+      this.hasFormErrors = true;
+      return;
+    }
+    debugger
+    this.profile = Object.assign(this.profile, this.profileForm.value);
+
+    this.activitiesList = '';
+    this.activities.forEach((o, i) => {
+      // if (o.parentActivityID != 0 && (o.c == true || o.r == true || o.u == true || o.d == true || o.e == true || o.ex == true))
+      if ((o.c == true || o.r == true || o.u == true || o.d == true))
+
+        this.activitiesList = this.activitiesList + '' + (o.parentActivityID.toString() + ',' + o.activityID.toString() + ',' + this.cbti(o.c) + ',' + this.cbti(o.r) + ',' + this.cbti(o.u) + ',' + this.cbti(o.d) + '|');
+    });
+
+    this.activitiesList = this.activitiesList.substring(0, this.activitiesList.length - 1);
+    if (this.activitiesList == '') {
+      this.isActivityStringValid = false;
+      return;
+    }
+    else {
+      this.isActivityStringValid = true;
+    }
+    this.profile.activitiesList = this.activitiesList;
+    this.submitted = true;
+    this.ktDialogService.show();
+    if (this.data.profile && this.data.profile.profileID > 0) {
+      this.profile.activitiesListAdd = this.profile.activitiesList;
+      this.profile.activitiesListDelete = '';
+
+      this._profileService
+        .updateProfile(this.profile)
+        .pipe(
+          finalize(() => {
+            this.submitted = false;
+            this.ktDialogService.hide();
+          })
+        )
+        .subscribe((baseResponse) => {
+          if (baseResponse.isSuccessful === true) {
+            //this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+            this.close(this.profile);
+          }
+          else {
+            //this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+          }
+
+          //this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/UpdateProfile', AE.Update, baseResponse.isSuccess);
+        });
+    }
+    else {
+      this._profileService
+        .addProfile(this.profile)
+        .pipe(
+          finalize(() => {
+            this.submitted = false;
+            this.ktDialogService.hide();
+          })
+        )
+        .subscribe((baseResponse) => {
+          if (baseResponse.isSuccessful === true) {
+            Swal.fire(
+              'Great!',
+              baseResponse.message,
+              'success'
+            )
+            this.dialogRef.close('add');
+            this.close(this.profile);
+          }
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+              footer: 'Error message' + baseResponse.message
+            })
+          }
+
+          // this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/AddProfile', AE.Create, baseResponse.isSuccess);
+        });
+    }
+
+  }
+
+  delete(profile: Profile): void {
+
+    this._profileService
+      .deleteProfile(profile.profileID)
+      .pipe(
+        finalize(() => {
+          //abp.notify.success(this.l('SuccessfullyDeleted'));
+        })
+      )
+      .subscribe(() => { });
+  }
+
+  close(result: any): void {
+    this.dialogRef.close(result);
+  }
+
+  /**
+   * On destroy
+   */
+  ngOnDestroy() {
+    if (this.componentSubscriptions) {
+      this.componentSubscriptions.unsubscribe();
+    }
+  }
+
+  /**
+   * Returns role for save
+   */
+  prepareProfile(): Profile {
+    const _profile = new Profile();
+    _profile.profileID = this.profile.profileID;
+    _profile.profileName = this.profile.profileName;
+    _profile.profileDescription = this.profile.profileDescription;
+    _profile.channel = this.profile.channel;
+    _profile.activitiesList = this.profile.activitiesList;
+
+    return _profile;
+  }
+
+  onAlertClose() {
+    this.hasFormErrors = false;
+  }
+
+  getTitle(): string {
+    if (this.data.profile && this.data.profile.profileID) {
+      return 'Edit Profile';
+    }
+    return 'New Profile';
   }
 
 }
