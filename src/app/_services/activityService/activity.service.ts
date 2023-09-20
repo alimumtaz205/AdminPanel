@@ -44,4 +44,14 @@ export class ActivityService {
     return this.http.get<GenericResponse<ActivityResponse[]>>(`${this.API_URL}GetParentActivities`)
       .pipe(map(data => <GenericResponse<ActivityResponse[]>>data));
   }
+
+
+  deleteActivity(formData: any): Observable<GenericResponse<ActivityResponse[]>> {
+    debugger;
+    var request = {
+      activityID: formData
+    }
+    return this.http.post<GenericResponse<ActivityResponse[]>>(`${this.API_URL}DeleteActivity`, request)
+      .pipe(map(data => <GenericResponse<ActivityResponse[]>>data));
+  }
 }

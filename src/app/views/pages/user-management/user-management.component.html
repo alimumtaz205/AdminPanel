@@ -1,1 +1,119 @@
-<p>user-management works!</p>
+<div class="bg-white mt-3 p-3 rounded vh-55">
+
+    <div class="d-flex justify-content-between align-items-center flex-reverse-lg">
+        <div class="d-flex align-items-center flex-reverse-md">
+
+
+            <div class="m24-md d-flex align-items-center xs-custom xs-custom-mt">
+
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Search here" #input>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="d-flex mt-xl-custom xs-custom">
+            <!-- <button class="btn btn-theme me-3" data-bs-toggle="modal" data-bs-target="#add_university">Add New University</button> -->
+            <button mat-raised-button color="primary" (click)="addUser()">Add New Profile</button>
+            <button class="btn btn-theme-secondary xs-custom-mt">
+                <svg class="me-1" width="16" height="16" viewBox="0 0 19 19" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M2.26216 18.1C1.64006 18.1 1.10733 17.8783 0.663944 17.4348C0.220562 16.9914 -0.000752131 16.4589 1.92034e-06 15.8375V12.4437H2.26216V15.8375H15.8351V12.4437H18.0972V15.8375C18.0972 16.4597 17.8755 16.9925 17.4322 17.436C16.9888 17.8794 16.4564 18.1008 15.8351 18.1H2.26216ZM9.04862 13.575L3.39323 7.91875L4.97674 6.27844L7.91754 9.21969V0H10.1797V9.21969L13.1205 6.27844L14.704 7.91875L9.04862 13.575Z"
+                        fill="#1F2E5D" />
+                </svg>
+
+                Export</button>
+        </div>
+    </div>
+    <div class="mt-3 vh-50 overflow-auto" style="width:11100px">
+
+        <table th.mat-header-cell mat-table [dataSource]="dataSource" class="w-100" [dataSource]="dataSource" matSort>
+            <caption></caption>
+            <ng-container matColumnDef="userId">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">ID</th>
+                <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userName">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="profileID">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Profile Id</th>
+                <td mat-cell *matCellDef="let element">{{ element.profileID }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="emailAddress">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Email</th>
+                <td mat-cell *matCellDef="let element">{{ element.emailAddress }}</td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="mobileNo">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Mobile</th>
+                <td mat-cell *matCellDef="let element">{{ element.mobileNo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Address</th>
+                <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="isactive">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Is Active</th>
+                <td mat-cell *matCellDef="let element">{{ element.isactive }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Action">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">Action</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button color="primary">
+                        <svg data-bs-toggle="modal" data-bs-target="#view_student" class="me-2 cursor-pointer"
+                            width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7.75 8.5C7.75 7.90326 7.98705 7.33097 8.40901 6.90901C8.83097 6.48705 9.40326 6.25 10 6.25C10.5967 6.25 11.169 6.48705 11.591 6.90901C12.0129 7.33097 12.25 7.90326 12.25 8.5C12.25 9.09674 12.0129 9.66903 11.591 10.091C11.169 10.5129 10.5967 10.75 10 10.75C9.40326 10.75 8.83097 10.5129 8.40901 10.091C7.98705 9.66903 7.75 9.09674 7.75 8.5Z"
+                                fill="#8AC642" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M0 8.5C0 10.14 0.425 10.691 1.275 11.796C2.972 14 5.818 16.5 10 16.5C14.182 16.5 17.028 14 18.725 11.796C19.575 10.692 20 10.139 20 8.5C20 6.86 19.575 6.309 18.725 5.204C17.028 3 14.182 0.5 10 0.5C5.818 0.5 2.972 3 1.275 5.204C0.425 6.31 0 6.861 0 8.5ZM10 4.75C9.00544 4.75 8.05161 5.14509 7.34835 5.84835C6.64509 6.55161 6.25 7.50544 6.25 8.5C6.25 9.49456 6.64509 10.4484 7.34835 11.1517C8.05161 11.8549 9.00544 12.25 10 12.25C10.9946 12.25 11.9484 11.8549 12.6517 11.1517C13.3549 10.4484 13.75 9.49456 13.75 8.5C13.75 7.50544 13.3549 6.55161 12.6517 5.84835C11.9484 5.14509 10.9946 4.75 10 4.75Z"
+                                fill="#8AC642" />
+                        </svg>
+                    </button>
+                    <button mat-button color="primary" (click)="editUser(element)">
+                        <svg class="me-2 cursor-pointer" width="19" height="19" viewBox="0 0 19 19" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M13.474 3.40783L15.592 5.52483M14.836 1.54283L9.109 7.26983C8.81309 7.56533 8.61128 7.94181 8.529 8.35183L8 10.9998L10.648 10.4698C11.058 10.3878 11.434 10.1868 11.73 9.89083L17.457 4.16383C17.6291 3.99173 17.7656 3.78742 17.8588 3.56256C17.9519 3.33771 17.9998 3.09671 17.9998 2.85333C17.9998 2.60994 17.9519 2.36895 17.8588 2.14409C17.7656 1.91923 17.6291 1.71492 17.457 1.54283C17.2849 1.37073 17.0806 1.23421 16.8557 1.14108C16.6309 1.04794 16.3899 1 16.1465 1C15.9031 1 15.6621 1.04794 15.4373 1.14108C15.2124 1.23421 15.0081 1.37073 14.836 1.54283Z"
+                                stroke="#1F2E5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M16 12.9998V15.9998C16 16.5302 15.7893 17.0389 15.4142 17.414C15.0391 17.789 14.5304 17.9998 14 17.9998H3C2.46957 17.9998 1.96086 17.789 1.58579 17.414C1.21071 17.0389 1 16.5302 1 15.9998V4.99976C1 4.46932 1.21071 3.96061 1.58579 3.58554C1.96086 3.21047 2.46957 2.99976 3 2.99976H6"
+                                stroke="#1F2E5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <button mat-button color="primary" (click)="deleteProfile(element)">
+                        <svg class="cursor-pointer" width="14" height="19" viewBox="0 0 14 19" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M1 16.5C1 17.6 1.9 18.5 3 18.5H11C12.1 18.5 13 17.6 13 16.5V6.5C13 5.4 12.1 4.5 11 4.5H3C1.9 4.5 1 5.4 1 6.5V16.5ZM13 1.5H10.5L9.79 0.79C9.61 0.61 9.35 0.5 9.09 0.5H4.91C4.65 0.5 4.39 0.61 4.21 0.79L3.5 1.5H1C0.45 1.5 0 1.95 0 2.5C0 3.05 0.45 3.5 1 3.5H13C13.55 3.5 14 3.05 14 2.5C14 1.95 13.55 1.5 13 1.5Z"
+                                fill="#FF0000" />
+                        </svg>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" scope="row"></tr>
+            <tr mat-row [class.demo-row-is-clicked]="clickedRows.has(row)"
+                *matRowDef="let row; columns: displayedColumns" scope="row"></tr>
+        </table>
+
+    </div>
+    <div class="d-flex justify-content-between mt-2 mt-sm-custom col-sm-reverse">
+        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+    </div>
+</div>

@@ -7,6 +7,9 @@ import { ActivityResponse } from 'src/app/_models/DTO/Response/Activity/Activity
 import { ActivityService } from 'src/app/_services/activityService/activity.service';
 import Swal from 'sweetalert2';
 import { AddActivityComponent } from './add-activity/add-activity.component';
+import { Activity } from 'src/app/_models/Activity';
+import { UtilsService } from 'src/app/_services/_global/utils.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-activity',
@@ -27,6 +30,7 @@ export class ActivityComponent implements OnInit {
 
   constructor(
     private activityService: ActivityService,
+    private layoutUtilsService: UtilsService,
     public dialogRef: MatDialog
   ) { }
 
@@ -83,6 +87,36 @@ export class ActivityComponent implements OnInit {
         this.getActivities(this.selected);
       }
     })
+  }
+
+  deleteActivity(_item: Activity) {
+    const _title = 'Activity';
+    const _description = 'Are you sure to permanently delete this activity?';
+    const _waitDesciption = 'Activity is deleting...';
+
+    const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
+    dialogRef.afterClosed().subscribe(res => {
+      if (!res) {
+        return;
+      }
+
+      this.activityService.deleteActivity(_item.activityID).pipe(
+        finalize(() => {
+
+        })
+      ).subscribe((baseResponse) => {
+        if (baseResponse.isSuccessful) {
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+          var Id = 1;
+          this.getActivities(Id);
+        }
+        else
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+
+        //this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/DeleteProfile', AE.Delete, baseResponse.isSuccess);
+      });
+
+    });
   }
 
   openDeleteDialog() {

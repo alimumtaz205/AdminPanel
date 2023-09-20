@@ -13,9 +13,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { AddUserComponent } from './add-user/add-user.component';
 
 @NgModule({
   declarations: [
+  
+    AddUserComponent
   ],
   imports: [
     CommonModule,

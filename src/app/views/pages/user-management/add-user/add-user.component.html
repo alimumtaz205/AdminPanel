@@ -1,0 +1,96 @@
+<!-- add university modal -->
+
+<div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white" [mat-dialog-close]="" aria-label="Close"></button>
+</div>
+<form class="form-right" [formGroup]="addUserForm">
+
+    <div class="container">
+        <div class="row mt-4">
+
+            <mat-form-field class="col-md-6">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Enter University" formControlName="userName" value="">
+                <mat-error *ngIf="hasError('userName', 'required')">Name is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6">
+                <mat-label>Profile</mat-label>
+                <mat-select placeholder="Select Profile" formControlName="profileID"
+                    (selectionChange)="changeClient($event.value)">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let profile of profileListModel"
+                        [value]="profile.profileID">{{profile.profileName}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('profileID', 'required')">Profile is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-6">
+                <mat-label>User Code</mat-label>
+                <input matInput placeholder="Enter User Code" formControlName="userCode" value="">
+                <mat-error *ngIf="hasError('userCode', 'required')">User Code is <strong>required</strong>
+                    <mat-error *ngIf="hasError('userCode', 'required')">User Code is <strong>required</strong>
+                    </mat-error>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6">
+                <mat-label>User Type</mat-label>
+                <input matInput placeholder="Enter User Type" formControlName="userTypeId" value="">
+                <mat-error *ngIf="hasError('userTypeId', 'required')">User Type is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-6">
+                <mat-label>City</mat-label>
+                <mat-select placeholder="Select City" formControlName="cityId"
+                    (selectionChange)="changeClient($event.value)">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let city of cityListModel" [value]="city.id">{{city.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('cityId', 'required')">City is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Enter Email" formControlName="emailAddress" value="">
+                <mat-error *ngIf="hasError('emailAddress', 'required')">Email Address is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+
+            <mat-form-field class="col-md-6">
+                <mat-label>Mobile No.</mat-label>
+                <input type="number" matInput placeholder="Please Enter Mobile No." formControlName="mobileNo" min="0">
+                <mat-error *ngIf="hasError('mobileNo', 'required')">Mobile No is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="Please Enter Address" formControlName="address">
+                <mat-error *ngIf="hasError('address', 'required')">Address is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-6">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Please Enter Password" formControlName="password">
+                <mat-error *ngIf="hasError('password', 'required')">Password is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="modal-footer border-0">
+        <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>   -->
+        <button type="button" mat-raised-button class="btn btn-danger" color="warn"
+            [mat-dialog-close]="">Cancel</button>
+        <button type="button" mat-raised-button class="btn btn-primary" color="primary"
+            (click)="onSubmit()">{{buttonText}}</button>
+    </div>
+</form>
