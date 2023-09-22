@@ -18,29 +18,18 @@ import { AuthGuard } from './views/pages/auth/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    component: LoginLayoutComponent,
+    path: '', component: LoginLayoutComponent,
     children: [{
       path: '',
       component: LoginComponent
     }]
   },
   {
-    path: '',
-    component: HomeLayoutComponent,
+    path: '', component: HomeLayoutComponent,
     children: [
-      {
-        path: 'home',
-        component: HomeComponent,
-      },
-      {
-        path: 'inquiry-managemnt',
-        component: InquiryManagemntComponent, canActivate: [AuthGuard]
-      },
-      {
-        path: 'app-activity',
-        component: ActivityComponent, canActivate: [AuthGuard]
-      },
+      { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+      { path: 'inquiry-managemnt', component: InquiryManagemntComponent, canActivate: [AuthGuard] },
+      { path: 'app-activity', component: ActivityComponent, canActivate: [AuthGuard] },
       {
         path: 'university-management',
         component: UniversityManagementComponent, canActivate: [AuthGuard]
@@ -58,8 +47,8 @@ const routes: Routes = [
         component: SubjectManagementComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'user-management',
-        component: UserManagementComponent, canActivate: [AuthGuard]
+        path: 'user-management', canActivate: [AuthGuard],
+        component: UserManagementComponent,
       },
       {
         path: 'app-profile',
