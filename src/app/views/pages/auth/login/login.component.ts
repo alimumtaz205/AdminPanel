@@ -123,15 +123,15 @@ export class LoginComponent implements OnInit {
           debugger;
           localStorage.setItem("token", JSON.stringify(resp.data.token))
           localStorage.setItem("loginUserId", JSON.stringify(resp.data.userId))
-
-          this.authService.login(resp.data.token, resp.data.userId).subscribe(data => {
-            console.log('return to ' + this.retUrl);
-            if (this.retUrl != null) {
-              this.router.navigate([this.retUrl]);
-            } else {
-              this.router.navigate(['/home']);
-            }
-          });
+          this.router.navigate(['/home']);
+          // this.authService.login(resp.data.token, resp.data.userId).subscribe(data => {
+          //   console.log('return to ' + this.retUrl);
+          //   if (this.retUrl != null) {
+          //     this.router.navigate([this.retUrl]);
+          //   } else {
+          //     this.router.navigate(['/home']);
+          //   }
+          // });
           // if(resp.responseCode==200){
           //   this.router.navigate(['/home']);
           // }
@@ -147,34 +147,6 @@ export class LoginComponent implements OnInit {
       });
   }
 
-
-  onSubmit2(): void {
-    debugger;
-    this.user_name = this.loginForm.value.misdn,
-      this.user_password = this.loginForm.value.password
-
-    if (this.user_name == "admin" && this.user_password == "admin") {
-      this.authService.login(this.user_name, this.user_password).subscribe(data => {
-        console.log('return to ' + this.retUrl);
-        if (this.retUrl != null) {
-          this.router.navigate([this.retUrl]);
-        } else {
-          this.router.navigate(['/home']);
-        }
-      });
-
-      this.router.navigate(['/home']);
-    }
-    else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Incorrect username or password!',
-        //footer: '<a href="">Why do I have this issue?</a>'
-      })
-    }
-
-  }
 
   randomString(length: number, chars: string | string[]) {
     var mask = '';

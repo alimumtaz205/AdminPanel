@@ -52,15 +52,27 @@ export class AddUserComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    // if (this.editData) {
-    //   debugger;
-    //   this.headerText = this.editData.header_text,
-    //     this.buttonText = "Update"
-    //   this.addUserForm.controls['countryName'].setValue(this.editData.countryID.id);
-    //   this.addUserForm.controls['university_name'].setValue(this.editData.universityDetails.name);
-    //   this.addUserForm.controls['university_id'].setValue(this.editData.universityDetails.id);
-    //   this.addUserForm.controls['university_description'].setValue(this.editData.universityDetails.description);
-    // }
+    if (this.editData) {
+      debugger;
+      this.headerText = this.editData.header_text,
+        this.buttonText = "Update"
+      //this.addUserForm.controls['userId'].setValue(this.editData.userId);
+      this.addUserForm.controls['userName'].setValue(this.editData.user.userName);
+      this.addUserForm.controls['profileID'].setValue(this.editData.user.profileID);
+      this.addUserForm.controls['userCode'].setValue(this.editData.user.userCode);
+      this.addUserForm.controls['userTypeId'].setValue(this.editData.user.userTypeId);
+      this.addUserForm.controls['cityId'].setValue(this.editData.user.cityId);
+      this.addUserForm.controls['emailAddress'].setValue(this.editData.user.emailAddress);
+      this.addUserForm.controls['mobileNo'].setValue(this.editData.user.mobileNo);
+
+      this.addUserForm.controls['address'].setValue(this.editData.address);
+      this.addUserForm.controls['password'].setValue(this.editData.password);
+      // this.addUserForm.controls['created      '].setValue(this.editData.created);
+      // this.addUserForm.controls['createdBy    '].setValue(this.editData.createdBy);
+      // this.addUserForm.controls['lastLoginTime'].setValue(this.editData.lastLoginTime);
+      // this.addUserForm.controls['wrongAttempts'].setValue(this.editData.wrongAttempts);
+      // this.addUserForm.controls['isactive     '].setValue(this.editData.isactive);
+    }
     this.getProfile();
     this.getCities();
   }
@@ -115,7 +127,7 @@ export class AddUserComponent implements OnInit {
       userTypeId: this.addUserForm.value.userTypeId,
       cityId: this.addUserForm.value.cityId,
       emailAddress: this.addUserForm.value.emailAddress,
-      mobileNo: this.addUserForm.value.mobileNo,
+      mobileNo: this.addUserForm.value.mobileNo + "",
       address: this.addUserForm.value.address,
       password: this.addUserForm.value.password,
     }

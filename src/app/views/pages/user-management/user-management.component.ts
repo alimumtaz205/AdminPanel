@@ -73,9 +73,10 @@ export class UserManagementComponent implements OnInit {
     debugger
     var width = (window.innerWidth - 80) + 'px';
     var height = (window.innerHeight - 150) + 'px';
+    var header_text = "Update User";
     console.info(width);
     console.info(height);
-    const dialogRef = this.dialogRef.open(AddUserComponent, { height: height, width: width, data: { user: user }, disableClose: true });
+    const dialogRef = this.dialogRef.open(AddUserComponent, { height: height, width: width, data: { user: user, header_text }, disableClose: true });
     dialogRef.afterClosed().subscribe(res => {
       if (!res) {
         debugger;
