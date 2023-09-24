@@ -19,6 +19,9 @@ export class AddUserComponent implements OnInit {
   selected_course = 'none';
   selected_subject = 'none';
   lovType: string = "1";
+  control: any;
+  hasFormErrors = false;
+  error: any;
   university_name: any;
   university_description: any;
   profileListModel: any[] = [
@@ -40,23 +43,40 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit(): void {
     debugger;
-    this.addUserForm = this.formBuilder.group({
-      userName: ['', Validators.required],
-      profileID: ['', Validators.required],
-      userCode: ['', Validators.required],
-      userTypeId: ['', Validators.required],
-      cityId: ['', Validators.required],
-      emailAddress: ['', Validators.required],
-      mobileNo: ['', Validators.required],
-      address: ['', Validators.required],
-      password: ['', Validators.required]
-    });
+    if (this.editData.user.userId == null || this.editData.user.userId == undefined) {
 
-    if (this.editData) {
-      debugger;
-      this.headerText = this.editData.header_text,
-        this.buttonText = "Update"
-      //this.addUserForm.controls['userId'].setValue(this.editData.userId);
+      this.headerText = "Add User";
+      this.buttonText = "Add"
+
+      this.addUserForm = this.formBuilder.group({
+        userName: ['', Validators.required],
+        profileID: ['', Validators.required],
+        userCode: ['', Validators.required],
+        userTypeId: ['', Validators.required],
+        cityId: ['', Validators.required],
+        emailAddress: ['', Validators.required],
+        mobileNo: ['', Validators.required],
+        address: ['', Validators.required],
+        password: ['', Validators.required]
+      });
+    }
+    else {
+      this.addUserForm = this.formBuilder.group({
+        userId: [''],
+        userName: ['', Validators.required],
+        profileID: ['', Validators.required],
+        userCode: ['', Validators.required],
+        userTypeId: ['', Validators.required],
+        cityId: ['', Validators.required],
+        emailAddress: ['', Validators.required],
+        mobileNo: ['', Validators.required],
+        address: [''],
+        password: ['']
+      });
+
+      this.headerText = "Update User";
+      this.buttonText = "Update"
+      this.addUserForm.controls['userId'].setValue(this.editData.user.userId);
       this.addUserForm.controls['userName'].setValue(this.editData.user.userName);
       this.addUserForm.controls['profileID'].setValue(this.editData.user.profileID);
       this.addUserForm.controls['userCode'].setValue(this.editData.user.userCode);
@@ -67,11 +87,6 @@ export class AddUserComponent implements OnInit {
 
       this.addUserForm.controls['address'].setValue(this.editData.address);
       this.addUserForm.controls['password'].setValue(this.editData.password);
-      // this.addUserForm.controls['created      '].setValue(this.editData.created);
-      // this.addUserForm.controls['createdBy    '].setValue(this.editData.createdBy);
-      // this.addUserForm.controls['lastLoginTime'].setValue(this.editData.lastLoginTime);
-      // this.addUserForm.controls['wrongAttempts'].setValue(this.editData.wrongAttempts);
-      // this.addUserForm.controls['isactive     '].setValue(this.editData.isactive);
     }
     this.getProfile();
     this.getCities();
@@ -107,13 +122,25 @@ export class AddUserComponent implements OnInit {
 
   onSubmit() {
     debugger;
-    if (this.addUserForm.valid) {
-      // if (!this.editData) {
+    if (!this.addUserForm.valid) {
+
+      this.hasFormErrors = false;
+      if (this.addUserForm.invalid) {
+        const controls = this.addUserForm.controls;
+        Object.keys(controls).forEach(controlName =>
+          controls[controlName].markAsTouched()
+        );
+
+        this.hasFormErrors = true;
+        return;
+      }
+    }
+    if (this.editData.user.userId == null || this.editData.user.userId == undefined) {
       this.addUser();
-      // }
-      // else {
-      //   this.updateUser();
-      // }
+    }
+    else {
+      debugger;
+      this.updateUser();
     }
   }
 
@@ -159,6 +186,7 @@ export class AddUserComponent implements OnInit {
   updateUser() {
     debugger;
     var formData = {
+      userId: this.addUserForm.value.userId,
       userName: this.addUserForm.value.userName,
       profileID: this.addUserForm.value.profileID,
       userCode: this.addUserForm.value.userCode,
@@ -166,8 +194,8 @@ export class AddUserComponent implements OnInit {
       cityId: this.addUserForm.value.cityId,
       emailAddress: this.addUserForm.value.emailAddress,
       mobileNo: this.addUserForm.value.mobileNo,
-      address: this.addUserForm.value.address,
-      password: this.addUserForm.value.password,
+      address: this.addUserForm.value.address
+      //password: this.addUserForm.value.password,
     }
     this.userService.updateUser(formData)
       .subscribe({

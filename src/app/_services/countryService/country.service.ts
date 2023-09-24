@@ -21,7 +21,7 @@ export class CountryService {
     var lov_Type = {
       lovType: lovType
     }
-    return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/GetCountries`, lov_Type)
+    return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/Get`, lov_Type)
       .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
   }
 
@@ -44,5 +44,14 @@ export class CountryService {
     debugger;
     return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/UpdateCountry`, formData)
       .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
+  }
+
+  deleteCountry(formData: any): Observable<GenericResponse<CountryResponse[]>> {
+    debugger;
+    var request = {
+      countryId: formData
+    }
+    return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/DeleteCountry`, request)
+      .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
   }
 }

@@ -9,9 +9,15 @@
     <div class="container">
         <div class="row mt-4">
 
+            <mat-form-field class="col-md-6" hidden="false">
+                <mat-label>Id</mat-label>
+                <input matInput placeholder="Enter Name" formControlName="userId" value="">
+
+            </mat-form-field>
+
             <mat-form-field class="col-md-6">
                 <mat-label>Name</mat-label>
-                <input matInput placeholder="Enter University" formControlName="userName" value="">
+                <input matInput placeholder="Enter Name" formControlName="userName" value="">
                 <mat-error *ngIf="hasError('userName', 'required')">Name is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
@@ -33,8 +39,6 @@
                 <mat-label>User Code</mat-label>
                 <input matInput placeholder="Enter User Code" formControlName="userCode" value="">
                 <mat-error *ngIf="hasError('userCode', 'required')">User Code is <strong>required</strong>
-                    <mat-error *ngIf="hasError('userCode', 'required')">User Code is <strong>required</strong>
-                    </mat-error>
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-6">

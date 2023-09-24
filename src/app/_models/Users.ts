@@ -1,4 +1,5 @@
 export class Users {
+    userId: number;
     userName: string;
     profileID: number;
     userCode: string;

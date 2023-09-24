@@ -97,9 +97,12 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     debugger
+
     const controls = this.loginForm.controls;
     /** check form */
+    var test1: any;
     if (this.loginForm.invalid) {
+      debugger
       Object.keys(controls).forEach(controlName =>
         controls[controlName].markAsTouched()
       );

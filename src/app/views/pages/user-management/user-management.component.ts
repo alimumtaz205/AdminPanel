@@ -73,10 +73,9 @@ export class UserManagementComponent implements OnInit {
     debugger
     var width = (window.innerWidth - 80) + 'px';
     var height = (window.innerHeight - 150) + 'px';
-    var header_text = "Update User";
     console.info(width);
     console.info(height);
-    const dialogRef = this.dialogRef.open(AddUserComponent, { height: height, width: width, data: { user: user, header_text }, disableClose: true });
+    const dialogRef = this.dialogRef.open(AddUserComponent, { height: height, width: width, data: { user: user }, disableClose: true });
     dialogRef.afterClosed().subscribe(res => {
       if (!res) {
         debugger;
@@ -87,7 +86,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  deleteProfile(_item: Profile) {
+  deleteUser(_item: Users) {
     const _title = 'User';
     const _description = 'Are you sure to permanently delete this user?';
     const _waitDesciption = 'User is deleting...';
@@ -97,12 +96,13 @@ export class UserManagementComponent implements OnInit {
       if (!res) {
         return;
       }
-
-      this.service.deleteUser(_item.profileID).pipe(
+      debugger;
+      this.service.deleteUser(_item.userId).pipe(
         finalize(() => {
 
         })
       ).subscribe((baseResponse) => {
+        debugger;
         if (baseResponse.isSuccessful) {
           this.layoutUtilsService.alertElement("", baseResponse.message);
           this.getUsers();

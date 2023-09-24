@@ -8,6 +8,8 @@ import { CountryService } from 'src/app/_services/countryService/country.service
 import { AddUniversityComponent } from '../university-management/dialog/add-university.component';
 import Swal from 'sweetalert2';
 import { AddCountryComponent } from './add-country/add-country.component';
+import { UtilsService } from 'src/app/_services/_global/utils.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'country-management',
@@ -19,18 +21,18 @@ export class CountryManagementComponent implements OnInit {
   message: string = "Are you sure?"
   confirmButtonText = "Yes"
   cancelButtonText = "Cancel"
-  dataSource:any;
-  lovType: string = "1";
+  dataSource: any;
+  lovType: any = 1;
   selected = 'none';
   selected_model = 'none';
-  selected_country_id:any
+  selected_country_id: any
   displayedColumns: string[] = [
     'ID',
     'Country Name',
     'Description',
     'Image',
     'Action'
-  
+
   ];
 
   clickedRows = new Set<CountryResponse>();
@@ -40,74 +42,108 @@ export class CountryManagementComponent implements OnInit {
 
   countryList: any[] = [
   ];
- 
+
 
   constructor(
     private countryService: CountryService,
-    public dialogRef:MatDialog
-     ) { 
+    private layoutUtilsService: UtilsService,
+    public dialogRef: MatDialog
+  ) {
   }
 
   ngOnInit(): void {
     this.getCountries(this.lovType);
   }
 
-  getCountries(countryId:any){
+  getCountries(countryId: any) {
     debugger;
-    countryId = "1";
+    countryId = 1;
     this.countryService.getCountries(countryId)
-    .subscribe({
-      next:(resp) => {
-        if (resp.isSuccessful) {
-          debugger;
-          this.dataSource = new MatTableDataSource(resp.data);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+      .subscribe({
+        next: (resp) => {
+          if (resp.isSuccessful) {
+            debugger;
+            this.dataSource = new MatTableDataSource(resp.data);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          }
+          else {
+            debugger;
+          }
+          console.error();
+
         }
-        else{
-          debugger;
-        }
-        console.error();
-        
-      }
-    });   
+      });
   }
 
-  changeClient(data:any){
- 
+  changeClient(data: any) {
+
     this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
 
-  openDialog(){
+  openDialog() {
     this.dialogRef.open(AddCountryComponent, {
       width: '40%',
       panelClass: 'custom-modalbox'
-    }).afterClosed().subscribe(val=>{
-      if(val==='add'){
+    }).afterClosed().subscribe(val => {
+      if (val === 'add') {
         this.getCountries(this.selected);
       }
     })
   }
 
-  updateDialog(element:any){
+  updateDialog(element: any) {
     debugger;
     this.dialogRef.open(AddCountryComponent, {
       width: '40%',
-      data : {
-        header_text : 'Update Country',
+      data: {
+        header_text: 'Update Country',
         countryID: this.selected,
         universityDetails: element
       }
-    }).afterClosed().subscribe(val=>{
-      if(val==='update'){
+    }).afterClosed().subscribe(val => {
+      if (val === 'update') {
         this.getCountries(this.selected);
       }
     })
   }
 
+
+
+  deleteCountry(_item: any) {
+    const _title = 'Country';
+    const _description = 'Are you sure to permanently delete this country?';
+    const _waitDesciption = 'Country is deleting...';
+
+    const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
+    dialogRef.afterClosed().subscribe(res => {
+      if (!res) {
+        return;
+      }
+      debugger;
+      this.countryService.deleteCountry(_item.id).pipe(
+        finalize(() => {
+
+        })
+      ).subscribe((baseResponse) => {
+        debugger;
+        if (baseResponse.isSuccessful) {
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+          this.getCountries(this.lovType);
+        }
+        else
+          this.layoutUtilsService.alertElement("", baseResponse.message);
+
+        //this.auditService.create(PagesEnum.profilesUrl, '/UserManagement/DeleteProfile', AE.Delete, baseResponse.isSuccess);
+      });
+
+    });
+  }
+
+
   openDeleteDialog() {
-  
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -130,7 +166,7 @@ export class CountryManagementComponent implements OnInit {
     // });
   }
 
-  closeModel(){
+  closeModel() {
     debugger;
     this.dialogRef.closeAll();
   }

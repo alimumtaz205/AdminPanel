@@ -16,7 +16,7 @@ export class AddUniversityComponent implements OnInit {
   selected_country = 'none';
   selected_course = 'none';
   selected_subject = 'none';
-  lovType: string = "1";
+  lovType: any = 1;
   university_name: any;
   university_description: any;
   countryListModel: any[] = [
