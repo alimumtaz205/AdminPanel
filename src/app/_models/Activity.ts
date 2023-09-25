@@ -19,6 +19,7 @@ export class Activity {
     updatedDate?: Date;
     userName: string = "";
     channelId: number = 0;
+    userInfo: any;
 
     clear() {
         this.activityID = 0;
