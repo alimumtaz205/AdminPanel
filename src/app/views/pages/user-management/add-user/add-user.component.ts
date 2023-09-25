@@ -135,12 +135,14 @@ export class AddUserComponent implements OnInit {
         return;
       }
     }
-    if (this.editData.user.userId == null || this.editData.user.userId == undefined) {
-      this.addUser();
-    }
     else {
-      debugger;
-      this.updateUser();
+      if (this.editData.user.userId == null || this.editData.user.userId == undefined) {
+        this.addUser();
+      }
+      else {
+        debugger;
+        this.updateUser();
+      }
     }
   }
 

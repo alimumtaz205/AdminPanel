@@ -121,6 +121,7 @@ export class AddProfileComponent implements OnInit {
         )
         .subscribe((baseResponse) => {
           if (baseResponse.isSuccessful) {
+            debugger;
             var userActivities = baseResponse.data;
             this.activities = userActivities;
             debugger

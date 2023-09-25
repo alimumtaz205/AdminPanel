@@ -1,6 +1,7 @@
 export class BaseResponseModel {
 	code: string;
-	isSuccess : boolean; // Admin
+	responseCode: string;
+	isSuccessful: boolean; // Admin
 	message: string;
 
 	data: any;
@@ -8,8 +9,8 @@ export class BaseResponseModel {
 
 export class GetUserTypeResponse {
 	code: string;
-	isSuccess : boolean; // Admin
+	isSuccess: boolean; // Admin
 	message: string;
-	channelId:number;
+	channelId: number;
 	data: any;
 }

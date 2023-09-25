@@ -1,7 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, Subscription, finalize } from 'rxjs';
+import { Activity } from 'src/app/_models/Activity';
+import { BaseResponseModel } from 'src/app/_models/_crud/_base.response.model';
+import { AE } from 'src/app/_models/enums/audit.enum';
+import { PagesEnum } from 'src/app/_models/enums/pages.enum';
+import { Permission } from 'src/app/_models/permission.model';
 import { ActivityService } from 'src/app/_services/activityService/activity.service';
+import { AuditTrailService } from 'src/app/_services/audit-trail/audit-trail.service';
+import { KtDialogService } from 'src/app/_services/kt-dialog.service';
 import Swal from 'sweetalert2';
 
 export interface Task {
@@ -16,177 +25,259 @@ export interface Task {
   styleUrls: ['./add-activity.component.css']
 })
 export class AddActivityComponent implements OnInit {
-  public headerText: any = "Add Activity";
-  public buttonText: any = "Add";
-  suctask_check: any[] | undefined;
-  selected_activity = 'none';
-  parent_activity: any;
-  activity_id: string = "1";
-  create: boolean = false;
+
+  // Public properties
+  saving = false;
+  testData: any;
+  submitted = false;
+  activityForm: FormGroup;
+  activity: Activity = new Activity();
+  parentActivities: Activity[] = [];
+  hasFormErrors = false;
+  viewLoading = false;
+  loadingAfterSubmit = false;
+  allPermissions$: Observable<Permission[]>;
+  rolePermissions: Permission[] = [];
+
+
+  // Private properties
+  private componentSubscriptions: Subscription;
+  form: any;
+  disabled: any;
   read: boolean = false;
-  update: boolean = false;
-  delete: boolean = false;
-  activity_name: any;
+  layoutUtilsService: any;
 
-  activityListModel: any[] = [
-  ];
-  addActivityForm!: FormGroup
-  task: Task = {
-    name: 'All',
-    completed: false,
-    subtasks: [
-      { name: 'C', completed: false },
-      { name: 'R', completed: false },
-      { name: 'U', completed: false },
-      { name: 'D', completed: false },
-    ],
-  };
-  subtask: any;
-
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public editData: any,
+  constructor(public dialogRef: MatDialogRef<AddActivityComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    //private store: Store<AppState>,
+    private _activityService: ActivityService,
     private formBuilder: FormBuilder,
-    private activityService: ActivityService,
-    private dialogRef: MatDialogRef<AddActivityComponent>
-  ) { }
+    //private layoutUtilsService: LayoutUtilsService,
+    private ktDialogService: KtDialogService,
+    private auditService: AuditTrailService,
+    private _snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {
-
-    this.addActivityForm = this.formBuilder.group({
-      activity_name: ['', Validators.required],
-      parent_activity: [''],
-      activity_url: ['', Validators.required],
-      list_all: [''],
-      list: [''],
-
-    });
-    if (this.editData) {
-      debugger;
-      this.headerText = this.editData.header_text,
-        this.buttonText = "Update"
-      this.addActivityForm.controls['activity_name'].setValue(this.editData.activityDetails.activityName);
-      this.addActivityForm.controls['parent_activity'].setValue(this.editData.activityDetails.parentActivityName);
-      this.addActivityForm.controls['activity_url'].setValue(this.editData.activityDetails.activityURL);
-      debugger;
-      for (var item in this.task.subtasks) {
-        this.task.subtasks[0].completed = this.editData.activityDetails.c;
-        this.task.subtasks[1].completed = this.editData.activityDetails.r;
-        this.task.subtasks[2].completed = this.editData.activityDetails.u;
-        this.task.subtasks[3].completed = this.editData.activityDetails.d;
-      }
-
-      //this.addActivityForm.controls['list'].setValue(this.editData.activityDetails.r);
-      //this.addActivityForm.controls['university_description'].setValue(this.editData.universityDetails.description);
-    }
-    this.getParentActivities(this.activity_id);
-  }
-
-  allComplete: boolean = false;
-
-  updateAllComplete() {
-    this.allComplete = this.task.subtasks != null && this.task.subtasks.every(t => t.completed);
-  }
-
-  someComplete(): boolean {
-
-    this.suctask_check = this.task.subtasks;
-
-    if (this.task.subtasks == null) {
-      return false;
-    }
-    return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
-  }
-
-  setAll(completed: boolean) {
-    debugger
-    this.allComplete = completed;
-
-    if (this.task.subtasks == null) {
-      return;
-    }
-    this.task.subtasks.forEach(t => (t.completed = completed));
-  }
-
-  getParentActivities(lovType: any) {
-    this.activityService.getParentActivities(lovType).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        debugger;
-        this.activityListModel = resp.data;
-      }
-      else {
-        debugger;
-      }
-    });
-  }
-
-
-  onSubmit() {
+  ngOnInit() {
     debugger;
-    if (this.addActivityForm.valid) {
-      if (!this.editData) {
-        this.addActivity();
-      }
-      else {
-        //this.updateUniversity();
-      }
-    }
-  }
+    this.activity.clear();
 
-  addActivity() {
-    debugger
-    if (this.allComplete) {
-      this.create = true;
+    this._activityService.getParent_Activities().subscribe(
+      response => {
+        console.log(response);
+        debugger;
+        this.parentActivities = response.data;
+      }
+    )
+
+    if (this.data.activity && this.data.activity.activityID) {
+      this.activity = this.data.activity;
+    }
+
+    if (this.activity.parentActivityID == 0) {
       this.read = true;
-      this.update = true;
-      this.delete = true;
     }
     else {
-      for (var item in this.suctask_check) {
-        this.create = this.suctask_check[0].completed;
-        this.read = this.suctask_check[1].completed;
-        this.update = this.suctask_check[2].completed;
-        this.delete = this.suctask_check[3].completed;
-      }
+      this.read = false;
+
     }
 
-    this.parent_activity = this.addActivityForm.value.parent_activity;
-    if (this.parent_activity === "") {
-      this.parent_activity = 0
-    }
+    this.activityForm = this.formBuilder.group({
+      activityName: [this.activity.activityName, [Validators.required, Validators.maxLength(200)]],
 
-    var formData = {
-      activityID: 0,
-      activityName: this.addActivityForm.value.activity_name + "",
-      parentActivityID: this.parent_activity,
-      activityURL: this.addActivityForm.value.activity_url,
-      c: this.create,
-      r: this.read,
-      u: this.update,
-      d: this.delete,
-    }
-
-    this.activityService.addActivity(formData).subscribe((resp) => {
-      if (resp.isSuccessful) {
-        //this.countryListModel = resp.data;
-        Swal.fire(
-          'Great!',
-          resp.message,
-          'success'
-        )
-        this.addActivityForm.reset();
-        this.dialogRef.close('add');
-      }
-      else {
-        debugger;
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-          footer: 'Error message' + resp.message
-        })
-      }
+      activityURL: [this.activity.activityURL, [Validators.required, Validators.maxLength(200)]],
+      parentActivityID: [this.activity.parentActivityID],
+      //isActive: [this.activity.isActive, [Validators.required]],
+      //isAdmin: [this.activity.isAdmin, [Validators.required]],
+      c: [this.activity.c, [Validators.required]],
+      //isReadOnly: [this.activity.isReadOnly, [Validators.required]],
+      r: [this.activity.r, [Validators.required]],
+      u: [this.activity.u, [Validators.required]],
+      d: [this.activity.d, [Validators.required]],
+      //e: [this.activity.e, [Validators.required]],
+      //ex: [this.activity.ex, [Validators.required]],
+      activityID: [this.activity.activityID],
+      checkAll: [false],
     });
+    this.auditService.create(PagesEnum.activitiesUrl, 'Activity Form', AE.Navigate, true);
   }
 
+  hasError(controlName: string, errorName: string): boolean {
+    return this.activityForm.controls[controlName].hasError(errorName);
+  }
+
+  onSubmit(): void {
+    debugger
+
+    this.hasFormErrors = false;
+    if (this.activityForm.invalid) {
+      const controls = this.activityForm.controls;
+      Object.keys(controls).forEach(controlName =>
+        controls[controlName].markAsTouched()
+      );
+
+      this.hasFormErrors = true;
+      return;
+    }
+    this.activity = Object.assign(this.activity, this.activityForm.value);
+    this.submitted = true;
+    this.ktDialogService.show();
+    debugger;
+    // update Activity
+    if (this.data.activity && this.data.activity.activityID > 0) {
+      debugger
+      this._activityService
+        .updateActivity(this.activity)
+        .pipe(
+          finalize(() => {
+            this.submitted = false;
+            this.ktDialogService.hide();
+          })
+        )
+        .subscribe((baseResponse: any) => {
+          if (baseResponse.isSuccessful === true) {
+            Swal.fire(
+              'Great!',
+              baseResponse.message,
+              'success'
+            )
+            //this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+            this.close(this.activity);
+          }
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+              footer: 'Error message' + baseResponse.message
+            })
+            // this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+          }
+
+          this.auditService.create(PagesEnum.activitiesUrl, '/UserManagement/UpdateActivity', AE.Update, baseResponse.isSuccess);
+        });
+    }
+    //Create Activity
+    else {
+      debugger
+      this._activityService
+        .createActivity(this.activity)
+        .pipe(
+          finalize(() => {
+            this.submitted = false;
+            this.ktDialogService.hide();
+          })
+        )
+        .subscribe((baseResponse: BaseResponseModel) => {
+          debugger;
+          console.log('base response');
+          console.log(baseResponse);
+          if (baseResponse.isSuccessful === true) {
+            Swal.fire(
+              'Great!',
+              baseResponse.message,
+              'success'
+            )
+            //this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.responseCode);
+            this.close(this.activity);
+          }
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+              footer: 'Error message' + baseResponse.message
+            })
+            // this.layoutUtilsService.alertElement("", baseResponse.message, baseResponse.code);
+          }
+
+          this.auditService.create(PagesEnum.activitiesUrl, '/UserManagement/AddActivity', AE.Create, baseResponse.isSuccessful);
+        });
+    }
+  }
+
+  get f(): any {
+    return this.activityForm.controls;
+  }
+
+  toggleCheckAll(value: boolean) {
+    //this.activityForm.controls['isActive'].setValue(value);
+    //.activityForm.controls['isAdmin'].setValue(value);
+    this.activityForm.controls['c'].setValue(value);
+    this.activityForm.controls['u'].setValue(value);
+    this.activityForm.controls['d'].setValue(value);
+    this.activityForm.controls['r'].setValue(value);
+    //this.activityForm.controls['isReadOnly'].setValue(value);
+    //this.activityForm.controls['e'].setValue(value);
+    //this.activityForm.controls['ex'].setValue(value);
+  }
+
+  // changeCheckbox() {
+  //   if (!this.f.isActive.value && !this.f.isAdmin.value && !this.f.c.value && !this.f.r.value && !this.f.u.value && !this.f.d.value && !this.f.e.value && !this.f.ex.value && !this.f.isReadOnly.value)
+  //     this.f.checkAll.setValue(false);
+  //   else if (this.f.isActive.value && this.f.isAdmin.value && this.f.c.value && this.f.r.value && this.f.u.value && this.f.d.value && this.f.e.value && this.f.ex.value && this.f.isReadOnly.value)
+  //     this.f.checkAll.setValue(true);
+  // }
+
+  changeCheckbox() {
+    if (!this.f.c.value && !this.f.r.value && !this.f.u.value && !this.f.d.value)
+      this.f.checkAll.setValue(false);
+    else if (this.f.c.value && this.f.r.value && this.f.u.value && this.f.d.value && this.f.e.value)
+      this.f.checkAll.setValue(true);
+  }
+
+  delete(activity: Activity): void {
+
+    this._activityService
+      .deleteActivity(activity.activityID)
+      .pipe(
+        finalize(() => {
+          //abp.notify.success(this.l('SuccessfullyDeleted'));
+        })
+      )
+      .subscribe(() => { });
+  }
+
+  close(result: any): void {
+    this.dialogRef.close(result);
+  }
+
+  /**
+   * On destroy
+   */
+  ngOnDestroy() {
+    if (this.componentSubscriptions) {
+      this.componentSubscriptions.unsubscribe();
+    }
+  }
+
+  /**
+   * Returns role for save
+   */
+  prepareActivity(): Activity {
+    const _activity = new Activity();
+    _activity.activityID = this.activity.activityID;
+    _activity.activityName = this.activity.activityName;
+    _activity.activityURL = this.activity.activityURL;
+    _activity.parentActivityID = this.activity.parentActivityID;
+    _activity.isActive = this.activity.isActive;
+    _activity.isAdmin = this.activity.isAdmin;
+    _activity.c = this.activity.c;
+    _activity.r = this.activity.r;
+    _activity.u = this.activity.u;
+    _activity.d = this.activity.d;
+    _activity.e = this.activity.e;
+    _activity.ex = this.activity.ex;
+    return _activity;
+  }
+
+  onAlertClose() {
+    this.hasFormErrors = false;
+  }
+
+  getTitle(): string {
+    if (this.data && this.data.activity.activityID) {
+      return 'Edit Activity';
+    }
+    return 'New Activity';
+  }
 }
