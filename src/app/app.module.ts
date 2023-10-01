@@ -56,6 +56,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthorizationService } from './_services/_global/authorization.service';
 import { HttpUtilsService } from './_services/_global/http-utils.service';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,7 @@ import { HttpUtilsService } from './_services/_global/http-utils.service';
     MatProgressBarModule,
     TranslateModule
   ],
-  providers: [KtDialogService, AuthorizationService, HttpUtilsService],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }, KtDialogService, AuthorizationService, HttpUtilsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

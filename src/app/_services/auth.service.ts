@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { User } from '../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
     value: any = null;
+    someValue: any;
+    invokeEvent: Subject<any> = new Subject();
     user = new BehaviorSubject<User>(this.value);
 
     private tokenExpirationTimer: any;
@@ -24,6 +26,12 @@ export class AuthService {
 
     }
 
+    callMethodOfSecondComponent(Data: any) {
+        debugger;
+        // this.someValue = "someVal";
+        this.invokeEvent.next(Data)
+    }
+
     gettoken() {
         return !!localStorage.getItem("token");
     }
@@ -32,6 +40,10 @@ export class AuthService {
         localStorage.removeItem('token');
         // localStorage.clear();
         this.router.navigateByUrl("/login");
+    }
+
+    setMenuItems(items: any) {
+
     }
     // }  
 

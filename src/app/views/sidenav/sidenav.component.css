@@ -1,0 +1,20 @@
+
+
+.nav1 ul li a:hover{
+    /* background: rgb(0,0,0,0.7); */
+    color: #082483;
+}
+
+.nav1 ul ul{
+    position: sticky;
+    left: 50px;
+    display: none;
+}
+
+.nav1 ul .dropdown{
+    position: relative;
+}
+
+.nav1 ul .dropdown:hover ul{
+    display: initial;
+}

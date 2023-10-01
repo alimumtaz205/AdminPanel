@@ -1,24 +1,92 @@
-<div class="main-container">
-    <div class="bg-white side-nav position-relative">
+<div class="bg-white side-nav position-relative">
 
-        <div class="logo-img">
-            <a href="index.html"><img src="../../../assets/pages/img/Isolation_Mode.png" alt="logo" class="img-fluid"
-                    data-bs-toggle="tooltip" data-bs-placement="right" title="Home"></a>
-        </div>
-        <div class="d-flex flex-column justify-content-between">
-            <div class="pt-4s ide-nav-responive">
+    <div class="logo-img">
+        <a href="index.html"><img src="../../../assets/pages/img/Isolation_Mode.png" alt="logo" class="img-fluid"
+                data-bs-toggle="tooltip" data-bs-placement="right" title="Home"></a>
+    </div>
+    <div class="d-flex flex-column justify-content-between">
+        <div class="pt-4s ide-nav-responive">
+
+            <div class="nav1">
                 <ul>
                     <a routerLink="/home" class="active">
-                        <li class="mt-3 px-1"><span class="p-1 me-2"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                    height="20" viewBox="0 0 576 512">
-                                    <path fill="#2b3990"
-                                        d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z" />
+                        <li>
+                            <span class="p-1 me-2"><svg width="20" height="20" viewBox="0 0 16 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.3333 6.16667C11.3333 8.25389 9.64278 9.94444 7.55556 9.94444C5.46833 9.94444 3.77778 8.25389 3.77778 6.16667L3.88167 5.27889L0.944444 3.80556L7.55556 0.5L14.1667 3.80556V8.52778H13.2222V4.27778L11.2294 5.27889L11.3333 6.16667ZM7.55556 11.8333C11.73 11.8333 15.1111 13.5239 15.1111 15.6111V17.5H0V15.6111C0 13.5239 3.38111 11.8333 7.55556 11.8333Z"
+                                        fill="#2B3990" />
                                 </svg>
                             </span>
                             <strong class="hide-custom">Dashboard</strong>
                         </li>
                     </a>
-                    <a routerLink="pages/student.html">
+
+                    <ng-container *ngFor="let menu of menuItems">
+                        <li class="dropdown">
+                            <ng-container>
+                                <ng-container *ngIf="menu.parentActivityID==0">
+                                    <a class="active">
+                                        <span class="p-1 me-2"><svg width="20" height="20" viewBox="0 0 16 18"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M11.3333 6.16667C11.3333 8.25389 9.64278 9.94444 7.55556 9.94444C5.46833 9.94444 3.77778 8.25389 3.77778 6.16667L3.88167 5.27889L0.944444 3.80556L7.55556 0.5L14.1667 3.80556V8.52778H13.2222V4.27778L11.2294 5.27889L11.3333 6.16667ZM7.55556 11.8333C11.73 11.8333 15.1111 13.5239 15.1111 15.6111V17.5H0V15.6111C0 13.5239 3.38111 11.8333 7.55556 11.8333Z"
+                                                    fill="#2B3990" />
+                                            </svg>
+                                        </span>
+                                        <strong class="hide-custom">{{menu.activityName}}</strong></a>
+                                </ng-container>
+                                <ng-container *ngIf="menu.parentActivityID!=0">
+                                    <ul>
+                                        <li>
+                                            <a routerLink={{menu.activityURL}}>
+                                                <span class=""><svg width="20" height="20" viewBox="0 0 21 22"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M18.375 9.09912H16.625V3.84912H17.5V2.09912H3.5V3.84912H4.375V9.09912H2.625C2.39294 9.09912 2.17038 9.19131 2.00628 9.3554C1.84219 9.5195 1.75 9.74206 1.75 9.97412V17.8491H19.25V9.97412C19.25 9.74206 19.1578 9.5195 18.9937 9.3554C18.8296 9.19131 18.6071 9.09912 18.375 9.09912ZM12.25 16.0991V12.5991H8.75V16.0991H6.125V3.84912H14.875V16.0991H12.25Z"
+                                                            fill="#2B3990" />
+                                                        <path
+                                                            d="M7.875 5.59912H9.625V7.34912H7.875V5.59912ZM11.375 5.59912H13.125V7.34912H11.375V5.59912ZM7.875 9.09912H9.625V10.8491H7.875V9.09912ZM11.375 9.09912H13.125V10.8491H11.375V9.09912Z"
+                                                            fill="#2B3990" />
+                                                    </svg>
+                                                </span>
+                                                <strong class="hide-custom">{{menu.activityName}}</strong>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                            </ng-container>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+            <!-- <a *ngIf="menu.parentActivityID==0" routerLink={{menu.activityURL}} class="dropdown-btn">
+                        <span class="p-1 me-2"><svg width="20" height="20" viewBox="0 0 16 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.3333 6.16667C11.3333 8.25389 9.64278 9.94444 7.55556 9.94444C5.46833 9.94444 3.77778 8.25389 3.77778 6.16667L3.88167 5.27889L0.944444 3.80556L7.55556 0.5L14.1667 3.80556V8.52778H13.2222V4.27778L11.2294 5.27889L11.3333 6.16667ZM7.55556 11.8333C11.73 11.8333 15.1111 13.5239 15.1111 15.6111V17.5H0V15.6111C0 13.5239 3.38111 11.8333 7.55556 11.8333Z"
+                                    fill="#2B3990" />
+                            </svg>
+                        </span>
+                        <strong class="hide-custom">{{menu.activityName}}</strong>
+                    </a>
+                    <div *ngIf="menu.parentActivityID!=0" class="dropdown-container">
+                        <a href="#">{{menu.activityName}}</a>
+                    </div> -->
+            <!-- </div> -->
+            <!-- <a *ngIf="menu.parentActivityID==0" routerLink={{menu.activityURL}} class="active">
+                        <li class="mt-3 px-1">
+                            <span class="p-1 me-2"><svg width="20" height="20" viewBox="0 0 16 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.3333 6.16667C11.3333 8.25389 9.64278 9.94444 7.55556 9.94444C5.46833 9.94444 3.77778 8.25389 3.77778 6.16667L3.88167 5.27889L0.944444 3.80556L7.55556 0.5L14.1667 3.80556V8.52778H13.2222V4.27778L11.2294 5.27889L11.3333 6.16667ZM7.55556 11.8333C11.73 11.8333 15.1111 13.5239 15.1111 15.6111V17.5H0V15.6111C0 13.5239 3.38111 11.8333 7.55556 11.8333Z"
+                                        fill="#2B3990" />
+                                </svg>
+                            </span>
+                            <strong class="hide-custom">{{menu.activityName}}</strong>
+                        </li>
+                    </a> -->
+            <!-- <a routerLink="pages/student.html">
                         <li class="px-1"><span class="p-1 me-2"><svg width="20" height="20" viewBox="0 0 16 18"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -152,17 +220,15 @@
                             </span>
                             <strong class="hide-custom">Profile</strong>
                         </li>
-                    </a>
-                </ul>
+                    </a> -->
+        </div>
+        <div class="hide-custom">
+            <div class="pt-lg-5 pt-md-4 pt-sm-3 pt-2 text-center">
+                <img src="../../../assets/pages/img/icon-documentation.png" alt="documnts" class="img-fluid">
             </div>
-            <div class="hide-custom">
-                <div class="pt-lg-5 pt-md-4 pt-sm-3 pt-2 text-center">
-                    <img src="../../../assets/pages/img/icon-documentation.png" alt="documnts" class="img-fluid">
-                </div>
-                <p class="text-center mb-0 fw-bold fs-6">Need help?</p>
-                <p class="text-center mb-0 fw-light fs-6 text-secondary">Please check our docs</p>
-                <div class="px-2 mt-2"><button class="btn btn-theme w-100">Documents</button></div>
-            </div>
+            <p class="text-center mb-0 fw-bold fs-6">Need help?</p>
+            <p class="text-center mb-0 fw-light fs-6 text-secondary">Please check our docs</p>
+            <div class="px-2 mt-2"><button class="btn btn-theme w-100">Documents</button></div>
         </div>
     </div>
 </div>

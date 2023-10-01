@@ -22,12 +22,8 @@ export class LoginComponent implements OnInit {
   user_password: any;
   loginForm!: FormGroup
   ipAddress: string;
+  menuItems: any;
   private unsubscribe: Subject<any>;
-
-  // loginForm = new FormGroup({
-  //   misdn: new FormControl("", [Validators.required, Validators.minLength(5)]),
-  //   password: new FormControl('')
-  // });
 
   constructor(
     //private _userUtilsService: UserUtilsService,
@@ -124,8 +120,17 @@ export class LoginComponent implements OnInit {
       .subscribe((resp) => {
         if (resp.isSuccessful) {
           debugger;
+          // this.menuItems = [{ "name": "Student", "link": "/student" },
+          // { "name": "Staff", "link": "/" }, { "name": "University Management", "link": "/student" },
+          // { "name": "Country Management", "link": "/" }, { "name": "Subject Management", "link": "/" },
+          // { "name": "Course Management", "link": "/" }, { "name": "University Management", "link": "/" },
+          // { "name": "Reports", "link": "/" }, { "name": "Activity", "link": "/app-activity" },];
+
+          this.authService.callMethodOfSecondComponent(this.menuItems);
+          localStorage.setItem("menuItems", JSON.stringify(resp.data.menuItems))
           localStorage.setItem("token", JSON.stringify(resp.data.token))
           localStorage.setItem("loginUserId", JSON.stringify(resp.data.userId))
+
           this.router.navigate(['/home']);
           // this.authService.login(resp.data.token, resp.data.userId).subscribe(data => {
           //   console.log('return to ' + this.retUrl);
