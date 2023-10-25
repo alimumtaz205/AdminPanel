@@ -19,15 +19,22 @@ import { CityManagmentComponent } from './views/pages/city-managment/city-managm
 import { ReferralManagmentComponent } from './views/pages/referral-managment/referral-managment.component';
 import { AppUsersComponent } from './views/pages/app-users/app-users.component';
 import { AuthGuard } from './views/pages/auth/guards/auth.guard';
+import { ChangePasswordComponent } from './views/pages/user-management/change-password/change-password.component';
 
 
 const routes: Routes = [
   {
     path: '', component: LoginLayoutComponent,
-    children: [{
-      path: '',
-      component: LoginComponent
-    }]
+    children: [
+      {
+        path: '',
+        component: LoginComponent
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordComponent, canActivate: [AuthGuard]
+      }
+    ]
   },
   {
     path: '', component: HomeLayoutComponent,
@@ -61,24 +68,28 @@ const routes: Routes = [
       },
       {
         path: 'inquiry-managemnt',
-        component: InquiryManagemntComponent, canActivate:[AuthGuard]
+        component: InquiryManagemntComponent, canActivate: [AuthGuard]
       },
       {
         path: 'referral-managment',
-        component: ReferralManagmentComponent , canActivate:[AuthGuard]
+        component: ReferralManagmentComponent, canActivate: [AuthGuard]
       },
       {
         path: 'city-managment',
-        component: CityManagmentComponent, canActivate:[AuthGuard]
+        component: CityManagmentComponent, canActivate: [AuthGuard]
       },
       {
         path: 'branch-managment',
-        component: BranchManagmentComponent, canActivate:[AuthGuard]
+        component: BranchManagmentComponent, canActivate: [AuthGuard]
       },
       {
         path: 'app-users',
-        component: AppUsersComponent, canActivate:[AuthGuard]
+        component: AppUsersComponent, canActivate: [AuthGuard]
       },
+      // {
+      //   path: 'change-password',
+      //   component: ChangePasswordComponent, canActivate: [AuthGuard]
+      // },
     ]
   },
   { path: '**', redirectTo: '' }

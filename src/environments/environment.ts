@@ -7,7 +7,7 @@ export const environment = {
   isMockEnabled: true, // You have to switch this, when your real back-end is done
   authTokenKey: 'authce9d77b308c149d5992a80073637e4d5',
   //API_URL: 'http://34.240.167.201/ApanelWeb/api/',
-  API_URL: 'http://34.240.167.201/ApanelWeb1/api/',
+  API_URL: 'http://34.240.167.201/ApanelWeb/api/',
   API_URL_AUTHENTICATION: 'http://34.240.167.201/Authenticator/api/',
 
   // API_URL: 'https://localhost:44383/api/',

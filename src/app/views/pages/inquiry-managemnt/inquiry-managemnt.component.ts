@@ -14,16 +14,16 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./inquiry-managemnt.component.css']
 })
 export class InquiryManagemntComponent implements OnInit {
-  dataSource:any;
-  userId:any;
+  dataSource: any;
+  userId: any;
   posts: any[] | undefined;
-  
+
   displayedColumns: string[] = [
     'Inquiry Id',
     'Student Name',
     'Country',
     'University',
-    'Course Level', 
+    'Course Level',
     'Subject',
     'Action'
   ];
@@ -33,53 +33,52 @@ export class InquiryManagemntComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   constructor(
-    private service:InqueryService,
+    private service: InqueryService,
     public dialogRef: MatDialog) { }
 
   ngOnInit(): void {
     debugger;
     this.userId = localStorage.getItem("loginUserId");
-     this.userId="6"
-     //const token = localStorage.getItem("token");
-      this.service.getPosts(this.userId).subscribe((resp) => {
-        debugger;
-        if (resp.isSuccessful) {
-          this.dataSource = new MatTableDataSource(resp.data);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        }
-        else{
-          debugger;
-          //this.dataSource = new MatTableDataSource(resp.data as any);
-          //this.dataSource.paginator = this.paginator;
-        }
-      });
-    }
-
-    editInquery(inquery:any) {
+    //const token = localStorage.getItem("token");
+    this.service.getPosts(this.userId).subscribe((resp) => {
       debugger;
-        const dialogRef = this.dialogRef.open(EditInqueryComponent, {
-          data: { inquery: inquery },
-          disableClose: true,
-        });
-        dialogRef.afterClosed().subscribe((res) => {
-          if (!res) {
-            return;
-          }
-        });
+      if (resp.isSuccessful) {
+        this.dataSource = new MatTableDataSource(resp.data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
       }
-
-      viewInquery(inquery:any) {
+      else {
         debugger;
-        
-          const dialogRef = this.dialogRef.open(ViewInqueryComponent, {
-            data: { inquery: inquery },
-            disableClose: true,
-          });
-          dialogRef.afterClosed().subscribe((res) => {
-            if (!res) {
-              return;
-            }
-          });
-        }
+        //this.dataSource = new MatTableDataSource(resp.data as any);
+        //this.dataSource.paginator = this.paginator;
+      }
+    });
+  }
+
+  editInquery(inquery: any) {
+    debugger;
+    const dialogRef = this.dialogRef.open(EditInqueryComponent, {
+      data: { inquery: inquery },
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((res) => {
+      if (!res) {
+        return;
+      }
+    });
+  }
+
+  viewInquery(inquery: any) {
+    debugger;
+
+    const dialogRef = this.dialogRef.open(ViewInqueryComponent, {
+      data: { inquery: inquery },
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((res) => {
+      if (!res) {
+        return;
+      }
+    });
+  }
 }

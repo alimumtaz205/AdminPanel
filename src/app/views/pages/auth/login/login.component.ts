@@ -62,26 +62,6 @@ export class LoginComponent implements OnInit {
         null,
         Validators.compose([
           Validators.required,
-          // check whether the entered password has a number
-          // CustomValidators.patternValidator(/\d/, {
-          //   hasNumber: true
-          // }),
-          // check whether the entered password has upper case letter
-          // CustomValidators.patternValidator(/[A-Z]/, {
-          //   hasCapitalCase: true
-          // }),
-          // check whether the entered password has a lower case letter
-          // CustomValidators.patternValidator(/[a-z]/, {
-          //   hasSmallCase: true
-          // }),
-          // check whether the entered password has a special character
-          // CustomValidators.patternValidator(
-          //   /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
-          //   {
-          //     hasSpecialCharacters: true
-          //   }
-          // ),
-          // Validators.minLength(8)
         ])
       ],
     });
@@ -122,6 +102,7 @@ export class LoginComponent implements OnInit {
           debugger
           this.authService.callMethodOfSecondComponent(this.menuItems);
           localStorage.setItem("menuItems", JSON.stringify(resp.data.menuItems))
+          localStorage.setItem("userCode", JSON.stringify(resp.data.userCode))
           localStorage.setItem("token", JSON.stringify(resp.data.token))
           localStorage.setItem("loginUserId", JSON.stringify(resp.data.userId))
 
@@ -153,7 +134,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  /**
+  /**  
  * Checking control validation
  *
  * @param controlName: string => Equals to formControlName
