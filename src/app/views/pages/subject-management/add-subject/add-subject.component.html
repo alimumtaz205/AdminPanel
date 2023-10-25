@@ -1,0 +1,64 @@
+  
+  <!-- add country modal -->
+
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white" [mat-dialog-close]="" aria-label="Close"></button>
+ </div>
+  <form class="form-right" [formGroup]="addSubjectForm">
+
+    <div class="container" style="padding-top: 20px;">
+    <div class="row">
+            <mat-form-field>
+                <mat-label>country</mat-label>
+                <mat-select placeholder="Select country" formControlName="country_Id" (selectionChange)="changeClientcountry($event.value)">
+                  <mat-option>None</mat-option> 
+                  <mat-option *ngFor="let country of countryListModel" [value]="country.id">{{country.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+          <mat-label>University</mat-label>
+          <mat-select placeholder="Select University" formControlName="university_Id" (selectionChange)="changeClientUniversity($event.value)">
+            <mat-option>None</mat-option> 
+            <mat-option *ngFor="let university of universityListModel" [value]="university.id">{{university.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+     </div>
+     <div class="row">
+        <mat-form-field>
+            <mat-label>course</mat-label>
+            <mat-select placeholder="Select Course" formControlName="course_Id" (selectionChange)="changeClientcourse($event.value)">
+              <mat-option>None</mat-option> 
+              <mat-option *ngFor="let course of courseListModel" [value]="course.id">{{course.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+       </div> 
+
+      <div class="row">
+          <mat-form-field class="example-full-width">
+              <mat-label>subject Name</mat-label>
+              <input matInput placeholder="Enter Course Name" formControlName="subject_name" value="">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" hidden="true">
+                <input matInput placeholder="Enter subject ID" formControlName="subject_id" value="">
+              </mat-form-field>
+    </div>
+      <div class="row">
+
+      <mat-form-field class="example-full-width">
+          <mat-label>subject Description</mat-label>
+          <textarea matInput placeholder="Please Enter Course Description" formControlName="subject_description"></textarea>
+        </mat-form-field>
+      </div>
+     
+
+    </div>
+  <div class="modal-footer border-0">
+    <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>   -->
+    <button type="button" style="margin:15px;"  mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+    <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+
+  </div>
+  </form>

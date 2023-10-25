@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
@@ -10,7 +11,9 @@ export class HeaderComponent implements OnInit {
   header_text: any = "Dashboard";
 
   constructor(
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private router: Router,
+    ) { }
 
   ngOnInit(): void {
   }
@@ -18,5 +21,10 @@ export class HeaderComponent implements OnInit {
   logOut() {
     debugger;
     this.authService.Logout();
+  }
+
+  ChangePassword() {
+    debugger;
+    this.router.navigate(['/change-password']);
   }
 }

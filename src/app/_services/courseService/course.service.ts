@@ -15,20 +15,28 @@ export class CourseService {
 
   constructor(private http:HttpClient) { }
 
-  getCourses(universityID:any): Observable<GenericResponse<CourseResponse[]>> {
-    debugger;
+  getCourses(UniversityID:number): Observable<GenericResponse<CourseResponse[]>> {
+    var universityID={
+      universityID:UniversityID
+    }
     return this.http.post<GenericResponse<CourseResponse[]>>(`${this.API_URL}Lov/GetCourses`, universityID)
     .pipe(map(data => <GenericResponse<CourseResponse[]>>data));
   }
 
+  deleteCourses(courseID:number): Observable<GenericResponse<CourseResponse[]>> {
+    var CourseID={
+      CourseID:courseID
+    }
+    return this.http.post<GenericResponse<CourseResponse[]>>(`${this.API_URL}Lov/DeleteCourse`, CourseID)
+    .pipe(map(data => <GenericResponse<CourseResponse[]>>data));
+  }
+
   addCounse(formData:any): Observable<GenericResponse<CourseResponse[]>> {
-    debugger;
     return this.http.post<GenericResponse<CourseResponse[]>>(`${this.API_URL}Lov/AddCourse`, formData)
     .pipe(map(data => <GenericResponse<CourseResponse[]>>data));
   }
 
   updateCourse(formData:any): Observable<GenericResponse<CourseResponse[]>> {
-    debugger;
     return this.http.post<GenericResponse<CourseResponse[]>>(`${this.API_URL}Lov/UpdateCourse`, formData)
     .pipe(map(data => <GenericResponse<CourseResponse[]>>data));
   }

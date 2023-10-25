@@ -14,25 +14,29 @@ export class UniversityService {
 
   constructor(private http:HttpClient) { }
 
-  getUniversities(countryId:string): Observable<GenericResponse<UniversityResponse[]>> {
-    debugger;
+  getUniversities(countryId:number): Observable<GenericResponse<UniversityResponse[]>> {
     var country_ID={
-      countryID: countryId += ''
+      countryID: countryId 
     }
-    debugger;
     return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/GetUniversities`, country_ID)
+    .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
+  }
+
+   deleteUniversities(universityId:string): Observable<GenericResponse<UniversityResponse[]>> {
+    var UniversityId={
+      UniversityId: universityId 
+    }
+    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/DeleteUniveristy`, UniversityId)
     .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
   }
 
 
   addUniversity(formData:any): Observable<GenericResponse<UniversityResponse[]>> {
-    debugger;
     return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/AddUniveristy`, formData)
     .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
   }
 
   updateUniveristy(formData:any): Observable<GenericResponse<UniversityResponse[]>> {
-    debugger;
     return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/UpdateUniveristy`, formData)
     .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
   }

@@ -40,40 +40,11 @@
                 <textarea matInput placeholder="Please Enter University Description" formControlName="university_description"></textarea>
               </mat-form-field>
             </div>
-            <div class=" col-md-6 mt-4">
-                <mat-form-field>
-                    <mat-label>Course Level</mat-label>
-                    <mat-select formControlName="selected_course" placeholder="Select Course Level">
-                      <mat-option>None</mat-option> 
-                      <mat-option [value]="1">Computer Science</mat-option> 
-                      <mat-option [value]="2">Education</mat-option> 
-                    </mat-select>
-                  </mat-form-field>
-            </div>
-            <div class=" col-md-6 mt-4">
-                <mat-form-field>
-                    <mat-label>Subject Level</mat-label>
-                    <mat-select formControlName="selected_subject" placeholder="Select Subject Level">
-                      <mat-option>None</mat-option> 
-                      <mat-option [value]="1">HSSC</mat-option> 
-                      <mat-option [value]="2">SSC</mat-option> 
-                    </mat-select>
-                  </mat-form-field>
-            </div>
-            <!-- <div class="col-md-6 mt-4">
-                <mat-form-field appearance="fill">
-                    <mat-label>Choose a date</mat-label>
-                    <input matInput [matDatepicker]="picker">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-            </div> -->
         </div>
           </div>
         <div class="modal-footer border-0">
-          <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>   -->
+          <button type="button" style="margin:15px;" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
           <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
-          <button type="button" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+          
         </div>
         </form>

@@ -1,0 +1,51 @@
+  
+  <!-- add country modal -->
+
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white"  [mat-dialog-close]="" aria-label="Close"></button>
+  </div>
+  <form class="form-right" [formGroup]="updateReferralForm">
+
+    <div class="container">
+      <div class="row" style="padding-top: 20px;">
+          <mat-form-field class="example-full-width">
+              <mat-label>name</mat-label>
+              <input matInput placeholder="Enter Name" formControlName="name" value="">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Enter Email" formControlName="email" value="">
+              </mat-form-field>
+            <mat-form-field class="example-full-width" hidden="true">
+                <mat-label>ID</mat-label>
+                <input matInput placeholder="ID" formControlName="id" value="">
+              </mat-form-field>
+    </div>
+      <div class="row">
+   
+        <mat-form-field class="example-full-width" >
+            <mat-label>Referral Name</mat-label>
+            <input matInput placeholder="Referral Name" formControlName="referralName" value="">
+          </mat-form-field>
+        <div class=" col-md-6 mt-4">
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select placeholder="Select Status" formControlName="status">
+                <mat-option>InProgress</mat-option>
+                <mat-option>Completed</mat-option> 
+                 <mat-option>Rejected</mat-option>
+                </mat-select>
+              </mat-form-field>
+    </div>
+      </div>
+  
+    </div>
+  <div class="modal-footer border-0">
+  
+    <button type="button" style="margin:15px;" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+    <button type="button"  mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+    
+  </div>
+  </form>

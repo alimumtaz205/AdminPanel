@@ -12,17 +12,16 @@ import { environment } from 'src/environments/environment';
 })
 export class CountryService {
 
-  private API_URL = environment.API_URL;
+  private API_URL= environment.API_URL;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http:HttpClient) { }
 
-  getCountries(lovType: any): Observable<GenericResponse<CountryResponse[]>> {
-    debugger;
-    var lov_Type = {
-      lovType: lovType
+  getCountries(lovType: number): Observable<GenericResponse<CountryResponse[]>> {
+    var lov_Type={
+      lovType:lovType
     }
     return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/Get`, lov_Type)
-      .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
+    .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
   }
 
   getCities() {
@@ -34,24 +33,21 @@ export class CountryService {
       .pipe(map(data => <GenericResponse<CityResponse[]>>data));
   }
 
-  addCountry(formData: any): Observable<GenericResponse<UniversityResponse[]>> {
-    debugger;
-    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/AddCountry`, formData)
-      .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
-  }
-
-  updateCountry(formData: any): Observable<GenericResponse<UniversityResponse[]>> {
-    debugger;
-    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/UpdateCountry`, formData)
-      .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
-  }
-
-  deleteCountry(formData: any): Observable<GenericResponse<CountryResponse[]>> {
-    debugger;
-    var request = {
-      countryId: formData
+  deleteCountry(CountryId: number): Observable<GenericResponse<CountryResponse[]>> {
+    var countryId={
+      countryId:CountryId
     }
-    return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/DeleteCountry`, request)
-      .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
+    return this.http.post<GenericResponse<CountryResponse[]>>(`${this.API_URL}Lov/DeleteCountry`, countryId)
+    .pipe(map(data => <GenericResponse<CountryResponse[]>>data));
+  }
+  
+  addCountry(formData:any): Observable<GenericResponse<UniversityResponse[]>> {
+    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/AddCountry`, formData)
+    .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
+  }
+
+  updateCountry(formData:any): Observable<GenericResponse<UniversityResponse[]>> {
+    return this.http.post<GenericResponse<UniversityResponse[]>>(`${this.API_URL}Lov/UpdateCountry`, formData)
+    .pipe(map(data => <GenericResponse<UniversityResponse[]>>data));
   }
 }

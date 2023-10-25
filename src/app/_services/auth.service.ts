@@ -8,24 +8,20 @@ import { Router } from '@angular/router';
     providedIn: 'root'
 })
 export class AuthService {
-    value: any = null;
-    someValue: any;
     invokeEvent: Subject<any> = new Subject();
-    user = new BehaviorSubject<User>(this.value);
+    private userSubject: BehaviorSubject<User>;
+    public user: Observable<User>;
 
-    private tokenExpirationTimer: any;
-
-    isAuthenticate: boolean = false;
-    /**
-     *
-     */
-    constructor(
-        private http: HttpClient,
-        private router: Router
-    ) {
-
+    constructor(private http: HttpClient, private router: Router) {
+        this.userSubject = new BehaviorSubject<User>(
+            JSON.parse(localStorage.getItem('token') as string)
+        );
+        this.user = this.userSubject.asObservable();
     }
 
+    public get userValue(): User {
+        return this.userSubject.value;
+    }
     callMethodOfSecondComponent(Data: any) {
         debugger;
         // this.someValue = "someVal";
@@ -45,17 +41,5 @@ export class AuthService {
     setMenuItems(items: any) {
 
     }
-    // }  
-
-    // authenticateUser(): Observable<boolean> {
-    //     debugger;
-    //     var userId = JSON.parse(localStorage.getItem("loginUserId") || '{}');
-    //     var token = JSON.parse(localStorage.getItem('token') || '{}');
-    //     if (userId.length > 0 && token.length > 0) {
-    //         this.isAuthenticate = true;
-    //         return of(true);
-    //     }
-    //     return of(false);
-    // }
 
 }

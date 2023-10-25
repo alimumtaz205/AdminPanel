@@ -4,6 +4,7 @@ export interface UserResponse {
     userCode: string;
     userTypeId: number;
     cityId: number;
+    branch_id: number;
     emailAddress: string;
     mobileNo: string;
     address: string;

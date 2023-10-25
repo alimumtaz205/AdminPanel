@@ -42,50 +42,55 @@ export class CourseManagementComponent implements OnInit {
 
   universityList: any[] = [
   ];
+  countryList: any[] = [
+  ];
  
 
   constructor(
     private courseService: CourseService,
     private universityService: UniversityService,
+    private countryService: CountryService,
     public dialogRef:MatDialog
      ) { 
   }
 
   ngOnInit(): void {
-    this.getUniversities(this.lovType);
+    this.getcountries(this.lovType);
+    //this.getUniversities(this.lovType);
   }
 
 
-  getUniversities(countryId:any){
-    debugger;
-    countryId = 1;
-    this.universityService.getUniversities(countryId).subscribe((resp) => {
+  getUniversities(universitryId:any){
+    this.universityService.getUniversities(universitryId).subscribe((resp) => {
       if (resp.isSuccessful) {
         this.universityList = resp.data;
       }
       else{
-        debugger;
+      }
+    });
+  }
+  getcountries(countryId:any){
+    countryId = 1;
+    this.countryService.getCountries(countryId).subscribe((resp) => {
+      if (resp.isSuccessful) {
+        this.countryList = resp.data;
+      }
+      else{
       }
     });
   }
 
   getCourses(ID:any){
-    debugger;
-    var formData={
-      universityID : this.selected_university_id +""
-    }
 
-    this.courseService.getCourses(formData)
+    this.courseService.getCourses(this.selected_university_id)
     .subscribe({
       next:(resp) => {
         if (resp.isSuccessful) {
-          debugger;
           this.dataSource = new MatTableDataSource(resp.data);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }
         else{
-          debugger;
         }
         console.error();
         
@@ -93,10 +98,15 @@ export class CourseManagementComponent implements OnInit {
     });   
   }
 
-  changeClient(data:any){
+  changeClientCountry(data:any){
  
     this.selected_university_id = data.id;
-    //this.getUniversities(data.id);
+    this.getUniversities(this.selected_university_id);
+  }
+  changeClientUniversity(data:any){
+ 
+    //this.selected_university_id = data.id;
+    //this.getUniversities(this.selected_university_id);
   }
 
   openDialog(){
@@ -111,7 +121,6 @@ export class CourseManagementComponent implements OnInit {
   }
 
   updateDialog(element:any){
-    debugger;
     this.dialogRef.open(AddCourseComponent, {
       width: '40%',
       data : {
@@ -126,7 +135,7 @@ export class CourseManagementComponent implements OnInit {
     })
   }
 
-  openDeleteDialog() {
+  openDeleteDialog(element:any) {
   
     Swal.fire({
       title: 'Are you sure?',
@@ -138,20 +147,35 @@ export class CourseManagementComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-      }
-    })
+        this.courseService.deleteCourses(element.id)
+        .subscribe({
+          next:(resp) => {
+          if (resp.isSuccessful) {
+            Swal.fire(
+              'Great!',
+              resp.message,
+              'success'
+            )
+          }
+          else{
+          
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+              footer: 'Error message : ' + ':' + resp.message
+            })
+          }
+        }
+        });
+    }
+  })
     // const dialogRef = this.dialogRef.open(AlertDialogDeleteComponent,{
     //   width: '15%',
     // });
   }
 
   closeModel(){
-    debugger;
     this.dialogRef.closeAll();
   }
 

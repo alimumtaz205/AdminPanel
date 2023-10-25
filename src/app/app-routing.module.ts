@@ -14,7 +14,12 @@ import { SubjectManagementComponent } from './views/pages/subject-management/sub
 import { UserManagementComponent } from './views/pages/user-management/user-management.component';
 import { ActivityComponent } from './views/pages/user-management/activity/activity.component';
 import { ProfileComponent } from './views/pages/user-management/profile/profile.component';
+import { BranchManagmentComponent } from './views/pages/branch-managment/branch-managment.component';
+import { CityManagmentComponent } from './views/pages/city-managment/city-managment.component';
+import { ReferralManagmentComponent } from './views/pages/referral-managment/referral-managment.component';
+import { AppUsersComponent } from './views/pages/app-users/app-users.component';
 import { AuthGuard } from './views/pages/auth/guards/auth.guard';
+
 
 const routes: Routes = [
   {
@@ -53,7 +58,27 @@ const routes: Routes = [
       {
         path: 'app-profile',
         component: ProfileComponent, canActivate: [AuthGuard]
-      }
+      },
+      {
+        path: 'inquiry-managemnt',
+        component: InquiryManagemntComponent, canActivate:[AuthGuard]
+      },
+      {
+        path: 'referral-managment',
+        component: ReferralManagmentComponent , canActivate:[AuthGuard]
+      },
+      {
+        path: 'city-managment',
+        component: CityManagmentComponent, canActivate:[AuthGuard]
+      },
+      {
+        path: 'branch-managment',
+        component: BranchManagmentComponent, canActivate:[AuthGuard]
+      },
+      {
+        path: 'app-users',
+        component: AppUsersComponent, canActivate:[AuthGuard]
+      },
     ]
   },
   { path: '**', redirectTo: '' }

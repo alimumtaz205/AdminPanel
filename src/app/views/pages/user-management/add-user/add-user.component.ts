@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BranchesService } from 'src/app/_services/branchService/branches.service';
 import { CountryService } from 'src/app/_services/countryService/country.service';
 import { ProfileService } from 'src/app/_services/profileService/profile.service';
 import { UserService } from 'src/app/_services/userService/user.service';
@@ -19,6 +20,7 @@ export class AddUserComponent implements OnInit {
   selected_course = 'none';
   selected_subject = 'none';
   lovType: string = "1";
+  selected_country_id:number = 0;
   control: any;
   hasFormErrors = false;
   error: any;
@@ -26,9 +28,12 @@ export class AddUserComponent implements OnInit {
   university_description: any;
   profileListModel: any[] = [
   ];
+  UsertypesListModel: any[] = [
+  ];
   userListModel: any[] = [
   ];
   cityListModel: any[] = [];
+  branchListModel: any[] = [];
   addUserForm!: FormGroup
   displayedColumns: string[] = ['']
 
@@ -36,7 +41,8 @@ export class AddUserComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public editData: any,
     private userService: UserService,
     private profileService: ProfileService,
-    private countryService: CountryService,
+    private countryService: CountryService, 
+    private branchService: BranchesService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<AddUserComponent>
   ) { }
@@ -54,6 +60,7 @@ export class AddUserComponent implements OnInit {
         userCode: ['', Validators.required],
         userTypeId: ['', Validators.required],
         cityId: ['', Validators.required],
+        branchId: ['', Validators.required],
         emailAddress: ['', Validators.required],
         mobileNo: ['', Validators.required],
         address: ['', Validators.required],
@@ -68,12 +75,13 @@ export class AddUserComponent implements OnInit {
         userCode: ['', Validators.required],
         userTypeId: ['', Validators.required],
         cityId: ['', Validators.required],
+        branchId: ['', Validators.required],
         emailAddress: ['', Validators.required],
         mobileNo: ['', Validators.required],
         address: [''],
         password: ['']
       });
-
+debugger;
       this.headerText = "Update User";
       this.buttonText = "Update"
       this.addUserForm.controls['userId'].setValue(this.editData.user.userId);
@@ -82,14 +90,16 @@ export class AddUserComponent implements OnInit {
       this.addUserForm.controls['userCode'].setValue(this.editData.user.userCode);
       this.addUserForm.controls['userTypeId'].setValue(this.editData.user.userTypeId);
       this.addUserForm.controls['cityId'].setValue(this.editData.user.cityId);
+      this.addUserForm.controls['branchId'].setValue(this.editData.user.branchId);
       this.addUserForm.controls['emailAddress'].setValue(this.editData.user.emailAddress);
       this.addUserForm.controls['mobileNo'].setValue(this.editData.user.mobileNo);
-
-      this.addUserForm.controls['address'].setValue(this.editData.address);
-      this.addUserForm.controls['password'].setValue(this.editData.password);
+      this.addUserForm.controls['address'].setValue(this.editData.user.address);
+      this.addUserForm.controls['password'].setValue(this.editData.user.password);
     }
     this.getProfile();
     this.getCities();
+    this.getuserTypes();
+    this.getBranches(this.editData.user.cityId);
   }
 
 
@@ -101,6 +111,17 @@ export class AddUserComponent implements OnInit {
     this.profileService.GetProfiles().subscribe((resp) => {
       if (resp.isSuccessful) {
         this.profileListModel = resp.data;
+      }
+      else {
+        debugger;
+      }
+    });
+  }
+
+  getuserTypes() {
+    this.userService.GetUsersTypes().subscribe((resp) => {
+      if (resp.isSuccessful) {
+        this.UsertypesListModel = resp.data;
       }
       else {
         debugger;
@@ -155,6 +176,7 @@ export class AddUserComponent implements OnInit {
       userCode: this.addUserForm.value.userCode,
       userTypeId: this.addUserForm.value.userTypeId,
       cityId: this.addUserForm.value.cityId,
+      branchId: this.addUserForm.value.branchId,
       emailAddress: this.addUserForm.value.emailAddress,
       mobileNo: this.addUserForm.value.mobileNo + "",
       address: this.addUserForm.value.address,
@@ -194,6 +216,7 @@ export class AddUserComponent implements OnInit {
       userCode: this.addUserForm.value.userCode,
       userTypeId: this.addUserForm.value.userTypeId,
       cityId: this.addUserForm.value.cityId,
+      branchId: this.addUserForm.value.branchId,
       emailAddress: this.addUserForm.value.emailAddress,
       mobileNo: this.addUserForm.value.mobileNo,
       address: this.addUserForm.value.address
@@ -226,6 +249,32 @@ export class AddUserComponent implements OnInit {
   }
 
   changeClient(data: any) {
+    debugger;
+    //this.selected_country_id = data.id;
+    //this.getUniversities(data.id);
+  }
+
+  changeClientCity(data: any) {
+    debugger;
+    this.selected_country_id = data;
+    this.getBranches(this.selected_country_id);
+  }
+  
+
+  getBranches(countryId:any) {
+    debugger;
+    this.branchService.getBranches(countryId).subscribe((resp) => {
+      if (resp.isSuccessful) {
+        debugger
+        this.branchListModel = resp.data;
+      }
+      else {
+        debugger;
+      }
+    });
+  }
+
+  changeClientBranch(data: any) {
     debugger;
     //this.selected_country_id = data.id;
     //this.getUniversities(data.id);

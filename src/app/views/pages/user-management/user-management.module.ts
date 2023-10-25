@@ -14,11 +14,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { AddUserComponent } from './add-user/add-user.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
-  
-    AddUserComponent
+    AddUserComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,

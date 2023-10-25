@@ -26,7 +26,6 @@ export class SidenavComponent implements OnInit {
     debugger
     this.menuItems1 = localStorage.getItem("menuItems")
     //this.menuItems1 = this.menuItems;
-    console.log("menu item test", this.menuItems1)
     this.menuItems = JSON.parse(this.menuItems1);
 
 

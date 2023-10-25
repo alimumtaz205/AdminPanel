@@ -1,0 +1,86 @@
+<div class="kt-portlet" >
+    <div class="kt-portlet__head kt-portlet__head__custom" id="list-header">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Update Inquery</h3>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="inqueryForm" class="kt-form kt-form--group-seperator-dashed">
+            <div class="kt-form">
+                <div class="kt-portlet__body">
+
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-4 kt-margin-bottom-20-mobile"> 
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput formControlName="inquiryID" [readonly]="true"/>
+                               
+                            </mat-form-field>
+                        </div>       
+                        
+                    <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput formControlName="studentName" [readonly]="true"/>
+                            </mat-form-field>
+                </div>    
+                <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput formControlName="countryID" [readonly]="true"/>
+                    </mat-form-field>
+                </div>
+                </div>
+                <div class="form-group kt-form__group row">
+                    <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                        <mat-form-field class="mat-form-field-fluid">
+                            <mat-label>Select Status</mat-label>
+                            <mat-select formControlName="status" name="status">
+                                <mat-option>None</mat-option>
+                                <mat-option value="1">In Progress</mat-option>
+                                <mat-option value="2">Closed</mat-option>
+                                <mat-option value="3">Terminated</mat-option>
+                                <mat-option value="4">Completed</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngIf="userId =='6'" class="col-lg-4 kt-margin-bottom-20-mobile">
+                        <mat-form-field class="mat-form-field-fluid" >
+                            <mat-label>Select City</mat-label>
+                            <mat-select formControlName="city" name="city" [(value)]="selectedCity" (selectionChange)="onSelectionChange(selectedCity)">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let item of citiesList" [value]="item.id">
+                                    {{ item.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                                <div *ngIf="userId =='6'" class="col-lg-4 kt-margin-bottom-20-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-label>Select Branch</mat-label>
+                                        <mat-select formControlName="branch" name="branch">
+                                            <mat-option>None</mat-option>
+                                            <mat-option *ngFor="let item of branchesList" [value]="item.cityID">
+                                                {{ item.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                             
+                            </div>
+                <div class="kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+                    <div class="kt-form__actions kt-form__actions--solid">
+                        <div class="row text-right">
+                            <div class="col-lg-12">
+                                <button type="button" class="button-red" mat-raised-button
+                                    [mat-dialog-close]="data.animal" cdkFocusInitial>
+                                    Cancel</button>&nbsp;
+                                <button type="button" mat-raised-button color="primary" (click)="onSubmit()"
+                                   >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+     
+    </div>

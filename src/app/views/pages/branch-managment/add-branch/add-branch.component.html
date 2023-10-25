@@ -1,0 +1,47 @@
+
+  <!-- add branch modal -->
+
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white"  [mat-dialog-close]="" aria-label="Close"></button>
+  </div>
+  <form class="form-right" [formGroup]="addBranchForm">
+
+    <div class="container">
+      <div class="row">
+      <div class=" col-md-6 mt-4">
+              <mat-form-field>
+                  <mat-label>City</mat-label>
+                  <mat-select placeholder="Select city" formControlName="cityName" (selectionChange)="changeClient($event.value)">
+                    <mat-option>None</mat-option> 
+                    <mat-option *ngFor="let City of cityListModel" [value]="City.id">{{City.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+      </div>
+      <div class="col-md-6 mt-4" hidden="true">
+        <mat-form-field class="example-full-width">
+            <mat-label>Branch Id</mat-label>
+            <input matInput placeholder="Enter Branch ID" formControlName="branch_id" value="">
+          </mat-form-field>
+    </div>
+      <div class="col-md-6 mt-4">
+          <mat-form-field class="example-full-width">
+              <mat-label>Branch</mat-label>
+              <input matInput placeholder="Enter Branch" formControlName="branch_name" value="">
+            </mat-form-field>
+      </div>
+
+      <div class="col-md-6 mt-4">
+      <mat-form-field class="example-full-width">
+          <mat-label>Branch Description</mat-label>
+          <textarea matInput placeholder="Please Enter Branch Description" formControlName="branch_description"></textarea>
+        </mat-form-field>
+      </div>
+  </div>
+    </div>
+  <div class="modal-footer border-0">
+    <button type="button" style="margin:15px;" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+    <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+    
+  </div>
+  </form>

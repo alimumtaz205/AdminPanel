@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,24 +14,24 @@ import { UniversityService } from 'src/app/_services/univeristyService/universit
   selector: 'university-management',
   templateUrl: './university-management.component.html',
   styleUrls: ['./university-management.component.css']
-
+  
 })
 export class UniversityManagementComponent implements OnInit {
   message: string = "Are you sure?"
   confirmButtonText = "Yes"
   cancelButtonText = "Cancel"
-  dataSource: any;
-  lovType: any = 1;
+  dataSource:any;
+  lovType: Number = 1;
   selected = 'none';
   selected_model = 'none';
-  selected_country_id: any
+  selected_country_id:any
   displayedColumns: string[] = [
     'ID',
     'University Name',
     'Description',
     'Image',
     'Action'
-
+  
   ];
 
   clickedRows = new Set<CountryResponse>();
@@ -41,85 +41,80 @@ export class UniversityManagementComponent implements OnInit {
 
   countryList: any[] = [
   ];
-
+ 
 
   constructor(
     private countryService: CountryService,
     private universityService: UniversityService,
-    public dialogRef: MatDialog
-  ) {
+    public dialogRef:MatDialog
+     ) { 
   }
 
   ngOnInit(): void {
     this.getCountries(this.lovType);
   }
 
-  getCountries(lovType: any) {
+  getCountries(lovType:any){
     this.countryService.getCountries(lovType).subscribe((resp) => {
       if (resp.isSuccessful) {
-        debugger;
         this.countryList = resp.data;
       }
-      else {
-        debugger;
+      else{
       }
     });
   }
 
-  getUniversities(countryId: any) {
-    debugger;
+  getUniversities(countryId:any){
     this.universityService.getUniversities(this.selected_country_id).subscribe((resp) => {
       if (resp.isSuccessful) {
         this.dataSource = new MatTableDataSource(resp.data);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       }
-      else {
-        debugger;
+      else{
       }
     });
   }
 
-  changeClient(data: any) {
-
+  changeClient(data:any){
+ 
     this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
-  changeClient1(data: any) {
-
+  changeClient1(data:any){
+  
     //this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
 
-  openDialog() {
+  openDialog(){
     this.dialogRef.open(AddUniversityComponent, {
       width: '40%',
       panelClass: 'custom-modalbox'
-    }).afterClosed().subscribe(val => {
-      if (val === 'add') {
+    }).afterClosed().subscribe(val=>{
+      if(val==='add'){
         this.getUniversities(this.selected);
       }
     })
   }
 
-  updateDialog(element: any) {
-    debugger;
+  updateDialog(element:any){
     this.dialogRef.open(AddUniversityComponent, {
       width: '40%',
-      data: {
-        header_text: 'Update University',
+      data : {
+        header_text : 'Update University',
         countryID: this.selected,
         universityDetails: element
       }
-    }).afterClosed().subscribe(val => {
-      if (val === 'update') {
+    }).afterClosed().subscribe(val=>{
+      if(val==='update'){
         this.getUniversities(this.selected);
       }
     })
   }
 
-  openDeleteDialog() {
-
+  openDeleteDialog(element:any) {
+  
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -130,11 +125,28 @@ export class UniversityManagementComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+        
+        this.universityService.deleteUniversities(element.id)
+          .subscribe({
+            next:(resp) => {
+            if (resp.isSuccessful) {
+              Swal.fire(
+                'Great!',
+                resp.message,
+                'success'
+              )
+            }
+            else{
+            
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+                footer: 'Error message : ' + ':' + resp.message
+              })
+            }
+          }
+          });
       }
     })
     // const dialogRef = this.dialogRef.open(AlertDialogDeleteComponent,{
@@ -142,8 +154,7 @@ export class UniversityManagementComponent implements OnInit {
     // });
   }
 
-  closeModel() {
-    debugger;
+  closeModel(){
     this.dialogRef.closeAll();
   }
 

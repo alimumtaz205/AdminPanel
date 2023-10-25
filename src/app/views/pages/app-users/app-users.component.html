@@ -1,0 +1,87 @@
+<div class="bg-white mt-3 p-3 rounded vh-55">
+
+    <div class="d-flex justify-content-between align-items-center flex-reverse-lg">
+        <div class="d-flex align-items-center flex-reverse-md">
+
+
+            <div class="m24-md d-flex align-items-center xs-custom xs-custom-mt">
+
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Search here" #input>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="d-flex mt-xl-custom xs-custom">
+            <!-- <button class="btn btn-theme me-3" data-bs-toggle="modal" data-bs-target="#add_university">Add New University</button> -->
+           
+            <button class="btn btn-theme-secondary xs-custom-mt">
+                <svg class="me-1" width="16" height="16" viewBox="0 0 19 19" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M2.26216 18.1C1.64006 18.1 1.10733 17.8783 0.663944 17.4348C0.220562 16.9914 -0.000752131 16.4589 1.92034e-06 15.8375V12.4437H2.26216V15.8375H15.8351V12.4437H18.0972V15.8375C18.0972 16.4597 17.8755 16.9925 17.4322 17.436C16.9888 17.8794 16.4564 18.1008 15.8351 18.1H2.26216ZM9.04862 13.575L3.39323 7.91875L4.97674 6.27844L7.91754 9.21969V0H10.1797V9.21969L13.1205 6.27844L14.704 7.91875L9.04862 13.575Z"
+                        fill="#1F2E5D" />
+                </svg>
+
+                Export</button>
+        </div>
+    </div>
+    <div class="mt-3 vh-50 overflow-auto" style="width:11100px">
+
+        <table th.mat-header-cell mat-table [dataSource]="dataSource" class="w-100" [dataSource]="dataSource" matSort>
+            <caption></caption>
+            <ng-container matColumnDef="userId">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">userId</th>
+                <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userName">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">userName</th>
+                <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userCode">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">userCode</th>
+                <td mat-cell *matCellDef="let element">{{ element.userCode }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="emailAddress">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">emailAddress</th>
+                <td mat-cell *matCellDef="let element">{{ element.emailAddress }}</td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="mobileNo">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">mobileNo</th>
+                <td mat-cell *matCellDef="let element">{{ element.mobileNo }}</td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="isactive">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef scope="col">isactive</th>
+                <td mat-cell *matCellDef="let element">{{ element.isactive }}</td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="isactive">
+                <th mat-header-cell class="table-header-style" *matHeaderCellDef  scope="col">isactive</th>
+                <!-- <td mat-cell *matCellDef="let element">{{ element.inquiryStatus}}</td> -->
+                <mat-cell *matCellDef="let element">
+                <td *ngIf="element.isactive === 0"> Inactive </td>
+                      <td *ngIf="element.isactive === 1"> Active </td>
+                   </mat-cell>
+              </ng-container> 
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" scope="row"></tr>
+            <tr mat-row [class.demo-row-is-clicked]="clickedRows.has(row)"
+                *matRowDef="let row; columns: displayedColumns" scope="row"></tr>
+        </table>
+
+    </div>
+    <div class="d-flex justify-content-between mt-2 mt-sm-custom col-sm-reverse">
+        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+    </div>
+</div>

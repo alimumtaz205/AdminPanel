@@ -20,7 +20,7 @@ import { StaffComponent } from './views/pages/staff/staff.component';
 import { StudentsComponent } from './views/pages/students/students.component';
 import { UserManagementComponent } from './views/pages/user-management/user-management.component';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -57,6 +57,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AuthorizationService } from './_services/_global/authorization.service';
 import { HttpUtilsService } from './_services/_global/http-utils.service';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { CityManagmentComponent } from './views/pages/city-managment/city-managment.component';
+import { ReferralManagmentComponent } from './views/pages/referral-managment/referral-managment.component';
+import { BranchManagmentComponent } from './views/pages/branch-managment/branch-managment.component';
+import { AddSubjectComponent } from './views/pages/subject-management/add-subject/add-subject.component';
+import { AddCityComponent } from './views/pages/city-managment/add-city/add-city.component';
+import { AddBranchComponent } from './views/pages/branch-managment/add-branch/add-branch.component';
+import { UpdateReferralComponent } from './views/pages/referral-managment/update-referral/update-referral.component';
+import { AppUsersComponent } from './views/pages/app-users/app-users.component';
+import { ViewInqueryComponent } from './views/pages/inquiry-managemnt/view-inquery/view-inquery.component';
+import { EditInqueryComponent } from './views/pages/inquiry-managemnt/edit-inquery/edit-inquery.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { JwtInterceptor } from './_services/_interceptor/jwt-interceptor';
 
 @NgModule({
   declarations: [
@@ -88,7 +100,17 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     ActionNotificationComponent,
     FetchEntityDialogComponent,
     UpdateStatusDialogComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    CityManagmentComponent,
+    ReferralManagmentComponent,
+    BranchManagmentComponent,
+    AddSubjectComponent,
+    AddCityComponent,
+    AddBranchComponent,
+    UpdateReferralComponent,
+    AppUsersComponent,
+    ViewInqueryComponent,
+    EditInqueryComponent
   ],
   imports: [
     BrowserModule,
@@ -118,9 +140,20 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     MatDialogModule,
     MatSnackBarModule,
     MatProgressBarModule,
-    TranslateModule
+    TranslateModule,
+    MatTabsModule
   ],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }, KtDialogService, AuthorizationService, HttpUtilsService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    KtDialogService,
+    AuthorizationService,
+    HttpUtilsService,
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -119,32 +119,17 @@ export class LoginComponent implements OnInit {
     this.auth.login(authData.username, authData.password, authData.ipAddress, authData.sessionID.toString())
       .subscribe((resp) => {
         if (resp.isSuccessful) {
-          debugger;
-          // this.menuItems = [{ "name": "Student", "link": "/student" },
-          // { "name": "Staff", "link": "/" }, { "name": "University Management", "link": "/student" },
-          // { "name": "Country Management", "link": "/" }, { "name": "Subject Management", "link": "/" },
-          // { "name": "Course Management", "link": "/" }, { "name": "University Management", "link": "/" },
-          // { "name": "Reports", "link": "/" }, { "name": "Activity", "link": "/app-activity" },];
-
+          debugger
           this.authService.callMethodOfSecondComponent(this.menuItems);
           localStorage.setItem("menuItems", JSON.stringify(resp.data.menuItems))
           localStorage.setItem("token", JSON.stringify(resp.data.token))
           localStorage.setItem("loginUserId", JSON.stringify(resp.data.userId))
 
           this.router.navigate(['/home']);
-          // this.authService.login(resp.data.token, resp.data.userId).subscribe(data => {
-          //   console.log('return to ' + this.retUrl);
-          //   if (this.retUrl != null) {
-          //     this.router.navigate([this.retUrl]);
-          //   } else {
-          //     this.router.navigate(['/home']);
-          //   }
-          // });
-          // if(resp.responseCode==200){
-          //   this.router.navigate(['/home']);
-          // }
+
         }
         else {
+          debugger
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -166,11 +151,6 @@ export class LoginComponent implements OnInit {
     for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
     return result;
 
-    //document.write(randomString(16, 'aA'));
-    //document.write('<br/>');
-    //document.write(randomString(32, '#aA'));
-    //document.write('<br/>');
-    //document.write(randomString(64, '#A!'));
   }
 
   /**

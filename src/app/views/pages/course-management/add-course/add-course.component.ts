@@ -20,7 +20,10 @@ export class AddCourseComponent implements OnInit {
   lovType: string = "1";
   university_name:any;
   university_description:any;
+  selected_university_id:any
   universityListModel: any[] = [
+  ];
+  countryListModel: any[] = [
   ];
   addCourseForm!:FormGroup
   displayedColumns:string[]=['']
@@ -29,12 +32,12 @@ export class AddCourseComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public editData:any,
     private courseService: CourseService,
     private universityService: UniversityService,
+    private countryService: CountryService,
     private formBuilder: FormBuilder,
     private dialogRef:MatDialogRef<AddCourseComponent>
     ) { }
 
   ngOnInit(): void {
-    debugger;
     this.addCourseForm = this.formBuilder.group({
       university_Id:['', Validators.required],
       course_id:[''],
@@ -44,19 +47,19 @@ export class AddCourseComponent implements OnInit {
 
   if(this.editData)
    {
-    debugger;
     this.headerText = this.editData.header_text,
     this.buttonText = "Update"
     this.addCourseForm.controls['university_Id'].setValue(this.editData.universityID.id);
     this.addCourseForm.controls['course_name'].setValue(this.editData.courseDetails.name);
     this.addCourseForm.controls['course_id'].setValue(this.editData.courseDetails.id);
     this.addCourseForm.controls['course_description'].setValue(this.editData.courseDetails.description);
+    this.getUniversities(this.lovType);
    }
-   this.getUniversities(this.lovType);
+  
+   this.getCountries(1);
   }
 
   onSubmit(){
-    debugger;
     if(this.addCourseForm.valid){
       if(!this.editData)
       {
@@ -74,16 +77,24 @@ export class AddCourseComponent implements OnInit {
         this.universityListModel = resp.data;
       }
       else{
-        debugger;
+      }
+    });
+  }
+
+  getCountries(lovType:any){
+    this.countryService.getCountries(lovType).subscribe((resp) => {
+      if (resp.isSuccessful) {
+        this.countryListModel = resp.data;
+      }
+      else{
       }
     });
   }
 
 
   addCourse(){
-    debugger;
     var formData={
-      universityID: this.addCourseForm.value.university_Id + "",
+      universityID: this.addCourseForm.value.university_Id + 0,
       courseName:  this.addCourseForm.value.course_name,
       courseDescription: this.addCourseForm.value.course_description
     }
@@ -100,7 +111,6 @@ export class AddCourseComponent implements OnInit {
         this.dialogRef.close('add');
       }
       else{
-        debugger;
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -112,10 +122,9 @@ export class AddCourseComponent implements OnInit {
   }
 
   updateCourse(){
-    debugger;
     var formData={
-      universityID: this.addCourseForm.value.university_Id + "",
-      courseID: this.addCourseForm.value.course_id + "",
+      universityID: this.addCourseForm.value.university_Id + 0,
+      courseID: this.addCourseForm.value.course_id + 0,
       courseName:  this.addCourseForm.value.course_name,
       courseDescription: this.addCourseForm.value.course_description
     }
@@ -133,7 +142,6 @@ export class AddCourseComponent implements OnInit {
         this.dialogRef.close('update');
       }
       else{
-        debugger;
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -145,14 +153,18 @@ export class AddCourseComponent implements OnInit {
     });
   }
 
-  changeClient(data:any){
-    debugger;
+  changeClientcountry(data:any){
+    //this.selected_country_id = data.id;
+    //this.getUniversities(data.id);
+    this.selected_university_id = data;
+    this.getUniversities(this.selected_university_id);
+  }
+  changeClientUniversity(data:any){
     //this.selected_country_id = data.id;
     //this.getUniversities(data.id);
   }
 
   closeModel(){
-    debugger;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',

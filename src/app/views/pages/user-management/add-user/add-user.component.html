@@ -43,8 +43,12 @@
             </mat-form-field>
             <mat-form-field class="col-md-6">
                 <mat-label>User Type</mat-label>
-                <input matInput placeholder="Enter User Type" formControlName="userTypeId" value="">
-                <mat-error *ngIf="hasError('userTypeId', 'required')">User Type is <strong>required</strong>
+                <mat-select placeholder="Enter User Type" formControlName="userTypeId">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let usertype of UsertypesListModel"
+                        [value]="usertype.userTypeId">{{usertype.userTypeName}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('userTypeId', 'required')">user Type is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
         </div>
@@ -52,7 +56,7 @@
             <mat-form-field class="col-md-6">
                 <mat-label>City</mat-label>
                 <mat-select placeholder="Select City" formControlName="cityId"
-                    (selectionChange)="changeClient($event.value)">
+                    (selectionChange)="changeClientCity($event.value)">
                     <mat-option>None</mat-option>
                     <mat-option *ngFor="let city of cityListModel" [value]="city.id">{{city.name}}</mat-option>
                 </mat-select>
@@ -60,9 +64,27 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-6">
+                <mat-label>Branch</mat-label>
+                <mat-select placeholder="Select Branch" formControlName="branchId"
+                    (selectionChange)="changeClientBranch($event.value)">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let branch of branchListModel" [value]="branch.id">{{branch.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('branchId', 'required')">Branch is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-6">
                 <mat-label>Email</mat-label>
                 <input matInput placeholder="Enter Email" formControlName="emailAddress" value="">
                 <mat-error *ngIf="hasError('emailAddress', 'required')">Email Address is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-6">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="Please Enter Address" formControlName="address">
+                <mat-error *ngIf="hasError('address', 'required')">Address is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
         </div>
@@ -75,19 +97,12 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-6">
-                <mat-label>Address</mat-label>
-                <input matInput placeholder="Please Enter Address" formControlName="address">
-                <mat-error *ngIf="hasError('address', 'required')">Address is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
-        </div>
-        <div class="row">
-            <mat-form-field class="col-md-6">
                 <mat-label>Password</mat-label>
                 <input matInput placeholder="Please Enter Password" formControlName="password">
                 <mat-error *ngIf="hasError('password', 'required')">Password is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
+           
         </div>
     </div>
     <div class="modal-footer border-0">

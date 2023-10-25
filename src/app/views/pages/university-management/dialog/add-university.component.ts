@@ -16,7 +16,7 @@ export class AddUniversityComponent implements OnInit {
   selected_country = 'none';
   selected_course = 'none';
   selected_subject = 'none';
-  lovType: any = 1;
+  lovType: number = 1;
   university_name: any;
   university_description: any;
   countryListModel: any[] = [
@@ -33,7 +33,6 @@ export class AddUniversityComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    debugger;
     this.addUniversityForm = this.formBuilder.group({
       countryName: ['', Validators.required],
       university_name: ['', Validators.required],
@@ -42,7 +41,6 @@ export class AddUniversityComponent implements OnInit {
     });
 
     if (this.editData) {
-      debugger;
       this.headerText = this.editData.header_text,
         this.buttonText = "Update"
       this.addUniversityForm.controls['countryName'].setValue(this.editData.countryID.id);
@@ -59,13 +57,11 @@ export class AddUniversityComponent implements OnInit {
         this.countryListModel = resp.data;
       }
       else {
-        debugger;
       }
     });
   }
 
   onSubmit() {
-    debugger;
     if (this.addUniversityForm.valid) {
       if (!this.editData) {
         this.addUniversity();
@@ -78,7 +74,6 @@ export class AddUniversityComponent implements OnInit {
 
 
   addUniversity() {
-    debugger;
     var formData = {
       countryID: this.addUniversityForm.value.countryName + "",
       universityName: this.addUniversityForm.value.university_name,
@@ -97,7 +92,6 @@ export class AddUniversityComponent implements OnInit {
         this.dialogRef.close('add');
       }
       else {
-        debugger;
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -110,7 +104,6 @@ export class AddUniversityComponent implements OnInit {
 
 
   updateUniversity() {
-    debugger;
     var formData = {
       countryID: this.addUniversityForm.value.countryName + "",
       universityID: this.addUniversityForm.value.university_id + "",
@@ -131,7 +124,6 @@ export class AddUniversityComponent implements OnInit {
             this.dialogRef.close('update');
           }
           else {
-            debugger;
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -144,13 +136,9 @@ export class AddUniversityComponent implements OnInit {
   }
 
   changeClient(data: any) {
-    debugger;
-    //this.selected_country_id = data.id;
-    //this.getUniversities(data.id);
   }
 
   closeModel() {
-    debugger;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',

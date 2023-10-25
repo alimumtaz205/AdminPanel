@@ -33,7 +33,7 @@ export class AlertDialogComponent implements OnInit {
     if (this.data.code == "00" || this.data.code == "0")
       this.data.code = "";
 
-    this.headerLogo = '../../../../../assets/pages/img/Isolation_Mode.png';
+    this.headerLogo = './assets/pages/img/Isolation_Mode.png';
   }
 
   /**

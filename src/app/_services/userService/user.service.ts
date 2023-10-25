@@ -18,6 +18,11 @@ export class UserService {
       .pipe(map(data => <GenericResponse<UserResponse[]>>data));
   }
 
+  GetUsersTypes(): Observable<GenericResponse<UserResponse[]>> {
+    return this.http.get<GenericResponse<UserResponse[]>>(`${this.API_URL}GetUserTypes`)
+      .pipe(map(data => <GenericResponse<UserResponse[]>>data));
+  }
+
   getProfileByID(formData: any): Observable<GenericResponse<UserResponse[]>> {
     debugger;
     var profileID = {
@@ -54,6 +59,7 @@ export class UserService {
       mobileNo: formData.mobileNo,
       userTypeId: formData.userTypeId,
       cityId: formData.cityId,
+      BranchId: formData.branchId,
       address: formData.address
     }
 

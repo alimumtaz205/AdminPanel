@@ -1,0 +1,35 @@
+  
+  <!-- add country modal -->
+
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">{{headerText}}</h5>
+    <button type="button" class="btn-close btn-close-white"  [mat-dialog-close]="" aria-label="Close"></button>
+  </div>
+  <form class="form-right" [formGroup]="addCityForm">
+
+    <div class="container">
+      <div class="row" style="padding-top: 20px;">
+          <mat-form-field class="example-full-width">
+              <mat-label>City Name</mat-label>
+              <input matInput placeholder="Enter City Name" formControlName="city_name" value="">
+            </mat-form-field>
+            <mat-form-field class="example-full-width" hidden="true">
+                <input matInput placeholder="Enter City ID" formControlName="city_id" value="">
+              </mat-form-field>
+    </div>
+      <div class="row">
+
+      <mat-form-field class="example-full-width">
+          <mat-label>City Description</mat-label>
+          <textarea matInput placeholder="Please Enter City Description" formControlName="city_description"></textarea>
+        </mat-form-field>
+      </div>
+  
+    </div>
+  <div class="modal-footer border-0">
+  
+    <button type="button" style="margin:15px;" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
+    <button type="button"  mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+    
+  </div>
+  </form>
