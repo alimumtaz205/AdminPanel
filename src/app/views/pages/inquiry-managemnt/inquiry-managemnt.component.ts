@@ -40,6 +40,7 @@ export class InquiryManagemntComponent implements OnInit {
     debugger;
     this.userId = localStorage.getItem("loginUserId");
     //const token = localStorage.getItem("token");
+    //this.userId = 9;
     this.service.getPosts(this.userId).subscribe((resp) => {
       debugger;
       if (resp.isSuccessful) {
@@ -73,6 +74,7 @@ export class InquiryManagemntComponent implements OnInit {
 
     const dialogRef = this.dialogRef.open(ViewInqueryComponent, {
       data: { inquery: inquery },
+      width: "900px",
       disableClose: true,
     });
     dialogRef.afterClosed().subscribe((res) => {

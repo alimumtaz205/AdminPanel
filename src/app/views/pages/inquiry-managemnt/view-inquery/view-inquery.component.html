@@ -1,158 +1,150 @@
 <div class="modal-content">
-    <div class="modal-header text-white bg-theme">
-      <h5 class="modal-title">Inquery Details</h5>
-      <button type="button" mat-dialog-close class="btn-close btn-close-white" aria-label="Close"></button>
-    </div>
-    
-    <mat-tab-group>
-        <mat-tab class="tab-text" label="Profile Details"> 
-    
-          <table th.mat-header-cell style="padding: 200px !important;" mat-table [dataSource]="dataSourceProfile" [dataSource]="dataSourceProfile" matSort>
-            <caption></caption>
-            <ng-container matColumnDef="Name">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Name</th>
-              <td mat-cell *matCellDef="let element" >{{ element.fullName }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Email">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Email</th>
-              <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Mobile No">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Mobile No</th>
-              <td mat-cell *matCellDef="let element">{{ element.mobileNo }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Date of Birth">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Date of Birth</th>
-              <td mat-cell *matCellDef="let element">{{ element.dateofBirth }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Country of Birth">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Country of Birth</th>
-              <td mat-cell *matCellDef="let element">{{ element.countryofBirth }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Gender">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Gender</th>
-              <td mat-cell *matCellDef="let element">{{ element.gender }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Nationality">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Nationality</th>
-              <td mat-cell *matCellDef="let element">{{ element.nationality }}</td>
-            </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsProfile" scope="row"></tr>
-            <tr
-            mat-row
-            [class.demo-row-is-clicked]="clickedRows.has(row)"
-            *matRowDef="let row; columns: displayedColumnsProfile"   scope="row"
-          ></tr>
-          </table>
-              
-        </mat-tab>
-        <mat-tab class="tab-text" label="Academic Details"> 
-          
-          <table th.mat-header-cell style="padding: 200px !important;" mat-table [dataSource]="dataSourceAcademic" [dataSource]="dataSourceAcademic" matSort>
-            <caption></caption>
-            <ng-container matColumnDef="Institution">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Institution</th>
-              <td mat-cell *matCellDef="let element" >{{ element.institution }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Course">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Course</th>
-              <td mat-cell *matCellDef="let element">{{ element.course }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Level Of Study">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Level Of Study</th>
-              <td mat-cell *matCellDef="let element">{{ element.levelOfStudy }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Start Date">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Start Date</th>
-              <td mat-cell *matCellDef="let element">{{ element.startDate }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="End Date">
-              <th class="table-header-style" *matHeaderCellDef scope="col">End Date</th>
-              <td mat-cell *matCellDef="let element">{{ element.endDate }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Percentage">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Percentage</th>
-              <td mat-cell *matCellDef="let element">{{ element.resultPercentage }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Obtained GPA">
-              <th class="table-header-style" *matHeaderCellDef scope="col">Obtained GPA</th>
-              <td mat-cell *matCellDef="let element">{{ element.resultObtainedGPA }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Total GPA">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Total GPA</th>
-              <td mat-cell *matCellDef="let element">{{ element.resultTotalGPA }}</td>
-            </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsAcademics" scope="row"></tr>
-            <tr
-            mat-row
-            [class.demo-row-is-clicked]="clickedRows.has(row)"
-            *matRowDef="let row; columns: displayedColumnsAcademics"   scope="row"
-          ></tr>
-          </table>
-          
-          </mat-tab>
-        <mat-tab class="tab-text" label="Work Details">
-    
-          <table th.mat-header-cell style="padding: 200px !important;" mat-table [dataSource]="dataSourceWork" [dataSource]="dataSourceWork" matSort>
-            <caption></caption>
-            <ng-container matColumnDef="Job Title">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Job Title</th>
-              <td mat-cell *matCellDef="let element" >{{ element.jobTitle }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Organization Name">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Organization Name</th>
-              <td mat-cell *matCellDef="let element">{{ element.organizationName }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Organization Address">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Organization Address</th>
-              <td mat-cell *matCellDef="let element">{{ element.organizationAddress }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="To Date">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">To Date</th>
-              <td mat-cell *matCellDef="let element">{{ element.toDate }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="From Date">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">From Date</th>
-              <td mat-cell *matCellDef="let element">{{ element.fromDate }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Currently Work">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Currently Work</th>
-              <td mat-cell *matCellDef="let element">{{ element.currentlyWork }}</td>
-            </ng-container>
-    
-            <ng-container matColumnDef="Work Experience">
-              <th  class="table-header-style" *matHeaderCellDef scope="col">Work Experience</th>
-              <td mat-cell *matCellDef="let element">{{ element.workExperience }}</td>
-            </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsWork" scope="row"></tr>
-            <tr
-            mat-row
-            [class.demo-row-is-clicked]="clickedRows.has(row)"
-            *matRowDef="let row; columns: displayedColumnsWork"   scope="row"
-          ></tr>
-          </table> 
-        </mat-tab>
-      </mat-tab-group>
-    
-    </div>
+  <div class="modal-header text-white bg-theme">
+    <h5 class="modal-title">Inquery Details</h5>
+    <button type="button" mat-dialog-close class="btn-close btn-close-white" aria-label="Close"></button>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Profile Details">
+
+      <table th.mat-header-cell mat-table [dataSource]="dataSourceProfile" [dataSource]="dataSourceProfile" matSort>
+        <caption></caption>
+        <ng-container matColumnDef="Name">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Email">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Email</th>
+          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Mobile No">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Mobile No</th>
+          <td mat-cell *matCellDef="let element">{{ element.mobileNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Date of Birth">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Date of Birth</th>
+          <td mat-cell *matCellDef="let element">{{ element.dateofBirth }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Country of Birth">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Country of Birth</th>
+          <td mat-cell *matCellDef="let element">{{ element.countryofBirth }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Gender">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Gender</th>
+          <td mat-cell *matCellDef="let element">{{ element.gender }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nationality">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Nationality</th>
+          <td mat-cell *matCellDef="let element">{{ element.nationality }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsProfile" scope="row"></tr>
+        <tr mat-row [class.demo-row-is-clicked]="clickedRows.has(row)"
+          *matRowDef="let row; columns: displayedColumnsProfile" scope="row"></tr>
+      </table>
+
+    </mat-tab>
+    <mat-tab label="Academic Details">
+
+      <table th.mat-header-cell style="padding: 200px !important;" mat-table [dataSource]="dataSourceAcademic"
+        [dataSource]="dataSourceAcademic" matSort>
+        <caption></caption>
+        <ng-container matColumnDef="Institution">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Institution</th>
+          <td mat-cell *matCellDef="let element">{{ element.institution }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Course">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Course</th>
+          <td mat-cell *matCellDef="let element">{{ element.course }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Level Of Study">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Level Of Study</th>
+          <td mat-cell *matCellDef="let element">{{ element.levelOfStudy }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Start Date">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Start Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.startDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="End Date">
+          <th class="table-header-style" *matHeaderCellDef scope="col">End Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.endDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Percentage">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Percentage</th>
+          <td mat-cell *matCellDef="let element">{{ element.resultPercentage }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Obtained GPA">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Obtained GPA</th>
+          <td mat-cell *matCellDef="let element">{{ element.resultObtainedGPA }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Total GPA">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Total GPA</th>
+          <td mat-cell *matCellDef="let element">{{ element.resultTotalGPA }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAcademics" scope="row"></tr>
+        <tr mat-row [class.demo-row-is-clicked]="clickedRows.has(row)"
+          *matRowDef="let row; columns: displayedColumnsAcademics" scope="row"></tr>
+      </table>
+
+    </mat-tab>
+    <mat-tab style="padding: 550px !important;" label="Work Details">
+
+      <table th.mat-header-cell mat-table [dataSource]="dataSourceWork" [dataSource]="dataSourceWork" matSort>
+        <caption></caption>
+        <ng-container matColumnDef="Job Title">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Job Title</th>
+          <td mat-cell *matCellDef="let element">{{ element.jobTitle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Organization Name">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Organization Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.organizationName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Organization Address">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Organization Address</th>
+          <td mat-cell *matCellDef="let element">{{ element.organizationAddress }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="To Date">
+          <th class="table-header-style" *matHeaderCellDef scope="col">To Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.toDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="From Date">
+          <th class="table-header-style" *matHeaderCellDef scope="col">From Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.fromDate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Currently Work">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Currently Work</th>
+          <td mat-cell *matCellDef="let element">{{ element.currentlyWork }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Work Experience">
+          <th class="table-header-style" *matHeaderCellDef scope="col">Work Experience</th>
+          <td mat-cell *matCellDef="let element">{{ element.workExperience }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsWork" scope="row"></tr>
+        <tr mat-row [class.demo-row-is-clicked]="clickedRows.has(row)"
+          *matRowDef="let row; columns: displayedColumnsWork" scope="row"></tr>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>

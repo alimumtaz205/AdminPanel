@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("menuItems", JSON.stringify(resp.data.menuItems))
           localStorage.setItem("userCode", JSON.stringify(resp.data.userCode))
           localStorage.setItem("token", JSON.stringify(resp.data.token))
-          localStorage.setItem("loginUserId", JSON.stringify(resp.data.userId))
+          localStorage.setItem("loginUserId", JSON.parse(resp.data.userId))
 
           this.router.navigate(['/home']);
 

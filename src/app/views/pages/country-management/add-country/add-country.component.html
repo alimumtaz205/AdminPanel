@@ -1,44 +1,57 @@
-  
-  <!-- add country modal -->
+<!-- add country modal -->
 
-  <div class="modal-header text-white bg-theme">
-    <h5 class="modal-title">{{headerText}}</h5>
-    <button type="button" class="btn-close btn-close-white"  [mat-dialog-close]="" aria-label="Close"></button>
-  </div>
-  <form class="form-right" [formGroup]="addCountryForm">
+<div class="modal-header text-white bg-theme">
+  <h5 class="modal-title">{{headerText}}</h5>
+  <button type="button" class="btn-close btn-close-white" [mat-dialog-close]="" aria-label="Close"></button>
+</div>
+<form class="form-right" [formGroup]="addCountryForm">
 
-    <div class="container">
-      <div class="row" style="padding-top: 20px;">
-          <mat-form-field class="example-full-width">
-              <mat-label>Country Name</mat-label>
-              <input matInput placeholder="Enter Country Name" formControlName="country_name" value="">
-            </mat-form-field>
-            <mat-form-field class="example-full-width" hidden="true">
-                <input matInput placeholder="Enter Country ID" formControlName="country_id" value="">
-              </mat-form-field>
+  <div class="container">
+    <div class="row" style="padding-top: 20px;">
+      <mat-form-field class="example-full-width">
+        <mat-label>Country Name</mat-label>
+        <input matInput placeholder="Enter Country Name" formControlName="country_name" value="">
+      </mat-form-field>
+      <mat-form-field class="example-full-width" hidden="true">
+        <input matInput placeholder="Enter Country ID" formControlName="country_id" value="">
+      </mat-form-field>
     </div>
-      <div class="row">
+    <div class="row">
 
       <mat-form-field class="example-full-width">
-          <mat-label>Country Description</mat-label>
-          <textarea matInput placeholder="Please Enter Country Description" formControlName="country_description"></textarea>
-        </mat-form-field>
-      </div>
-      <!-- <div class="col-md-6 mt-4">
-          <mat-form-field appearance="fill">
-              <mat-label>Choose a date</mat-label>
-              <input matInput [matDatepicker]="picker">
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-      </div> -->
-
+        <mat-label>Country Description</mat-label>
+        <textarea matInput placeholder="Please Enter Country Description"
+          formControlName="country_description"></textarea>
+      </mat-form-field>
     </div>
-  <div class="modal-footer border-0">
-  
-    <button type="button" style="margin:15px;" mat-raised-button color="primary" (click)="onSubmit()">{{buttonText}}</button>
-    <button type="button"  mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
-    
+    <!-- <div class="col-md-6 mt-4">-->
+    <mat-form-field class="example-full-width">
+
+      <input matInput [value]="selectedFileNames.length ? selectedFileNames : 'Select Images'" />
+
+      <input type="file" id="fileInput" name="fileInput" formControlName="file_upload" accept="image/*" multiple
+        (change)="selectFiles($event)" />
+
+
+      <div>
+        <img *ngFor='let preview of previews' [src]="preview" class="preview">
+      </div>
+
+      <div *ngIf="message.length" class="message">
+        <ul *ngFor="let msg of message; let i = index">
+          <li>{{ msg }}</li>
+        </ul>
+      </div>
+
+    </mat-form-field>
+    <!--</div> -->
+
   </div>
-  </form>
+  <div class="modal-footer border-0">
+
+    <button type="button" style="margin:15px;" mat-raised-button color="primary"
+      (click)="onSubmit()">{{buttonText}}</button>
+    <button type="button" mat-raised-button color="warn" [mat-dialog-close]="">Cancel</button>
+
+  </div>
+</form>
